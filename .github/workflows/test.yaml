@@ -1,0 +1,17 @@
+name: ReusableDeploy
+on: 
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: version
+        run: |
+          echo "GV_PLATFORM_VERSION=$(yq .version $GITHUB_WORKSPACE/platform/Chart.yaml)" >> $GITHUB_ENV
+      - name: versionecho
+        run: |
+          echo $GV_PLATFORM_VERSION
+      - name: versionecho
+        run: |
+          echo {{ env.GV_PLATFORM_VERSION }}
