@@ -5,9 +5,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: version
+      - name: testv
         run: |
-          echo "GV_PLATFORM_VERSION=$(yq .version $GITHUB_WORKSPACE/src/chart.yaml)" >> $GITHUB_ENV
+          echo "GV_PLATFORM_VERSION=$(yq .version src/chart.yaml)" >> $GITHUB_ENV        
       - name: versionecho
         run: |
           echo $GV_PLATFORM_VERSION
