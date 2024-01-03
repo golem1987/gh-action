@@ -10,4 +10,6 @@ jobs:
         run: |
           echo "GV_PLATFORM_VERSION=$(yq .version src/chart.yaml)" >> $GITHUB_ENV        
       - name: Push new tag
-        run: git push origin $GV_PLATFORM_VERSION
+        run: |
+          git tag ${{ env.GV_PLATFORM_VERSION }}
+          git push origin ${{ env.GV_PLATFORM_VERSION }}
