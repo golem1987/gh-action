@@ -14,4 +14,12 @@ jobs:
           echo $GV_PLATFORM_VERSION
       - name: versionecho
         run: |
-          echo {{ env.GV_PLATFORM_VERSION }}
+          echo ${{ env.GV_PLATFORM_VERSION }}
+      - name: Create new tag
+        id: create_tag
+        run: |
+          echo "Latest tag: $GV_PLATFORM_VERSION"
+          git tag $GV_PLATFORM_VERSION
+          echo "New tag: $GV_PLATFORM_VERSION"
+      - name: Push new tag
+        run: git push origin $GV_PLATFORM_VERSION
