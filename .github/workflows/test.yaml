@@ -5,6 +5,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: testv
         run: |
           echo "GV_PLATFORM_VERSION=$(yq .version src/chart.yaml)" >> $GITHUB_ENV        
