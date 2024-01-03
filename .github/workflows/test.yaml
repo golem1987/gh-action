@@ -1,4 +1,4 @@
-name: ReusableDeploy
+name: Frula
 on: 
   workflow_call:
 
