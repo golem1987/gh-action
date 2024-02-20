@@ -24,6 +24,7 @@ jobs:
       - name: Bump Minor Version
         run: |
           CURRENT_VERSION=$(yq .version ./Chart.yaml)
+          echo $CURRENT_VERSION
           IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
           MAJOR=${MAJOR}
           MINOR=${MINOR}
