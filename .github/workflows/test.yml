@@ -12,6 +12,6 @@ jobs:
       - name: echo version
         run: |
           echo $GV_PLATFORM_VERSION
-        - name: echoversion
+      - name: echoversion
         run: |
           echo ${{ GV_PLATFORM_VERSION }}
