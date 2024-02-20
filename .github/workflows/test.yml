@@ -20,14 +20,14 @@ jobs:
         run: |
           echo ${{ env.VERSION }}
           
-    - name: Bump Minor Version
-      run: |
+      - name: Bump Minor Version
+        run: |
 
-        CURRENT_VERSION=$(yq .version ./Chart.yaml)
-        MAJOR=${CURRENT_VERSION[0]}
-        MINOR=$((CURRENT_VERSION[1]+1))
-        NEW_VERSION="$MAJOR.$MINOR"
-        echo "Current version: $CURRENT_VERSION"
-        echo "New version: $NEW_VERSION"
-        sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" ./Chart.yaml
+          CURRENT_VERSION=$(yq .version ./Chart.yaml)
+          MAJOR=${CURRENT_VERSION[0]}
+          MINOR=$((CURRENT_VERSION[1]+1))
+          NEW_VERSION="$MAJOR.$MINOR"
+          echo "Current version: $CURRENT_VERSION"
+          echo "New version: $NEW_VERSION"
+          sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" ./Chart.yaml
  
