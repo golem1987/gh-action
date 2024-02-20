@@ -20,6 +20,7 @@ jobs:
           echo "VERSION_CURRENT=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV 
       - name: Run version increase
         run: |
+          chmod +x ./.github/workflows/increase_version.sh
           ./.github/workflows/increase_version.sh $VERSION_DEVELOP $VERSION_CURRENT
         
       - name: Update Chart.yaml with the new version
