@@ -24,9 +24,12 @@ jobs:
         run: |
 
           CURRENT_VERSION=$(yq .version ./Chart.yaml)
-          MAJOR=${CURRENT_VERSION[0]}
-          MINOR=$((CURRENT_VERSION[1]+1))
-          NEW_VERSION="$MAJOR.$MINOR"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+          MAJOR=${MAJOR}
+          MINOR=${MINOR}
+          PATCH=${PATCH}
+          PATCH=$((PATCH+1))
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
           echo "Current version: $CURRENT_VERSION"
           echo "New version: $NEW_VERSION"
           sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" ./Chart.yaml
