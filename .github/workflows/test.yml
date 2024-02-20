@@ -30,11 +30,9 @@ jobs:
           MINOR=${MINOR}
           PATCH=${PATCH}
           PATCH=$((PATCH+1))
-          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
-          echo "NEW_VERSION=$NEW_VERSION"
+          echo 'NEW_VERSION="$MAJOR.$MINOR.$PATCH"' >> $GITHUB_ENV
           echo "Current version: $CURRENT_VERSION"
           echo "New version: $NEW_VERSION"
-          echo $VERSION
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
