@@ -8,10 +8,31 @@ jobs:
       - uses: actions/checkout@v3
       - name: testv
         run: |
-          echo "GV_PLATFORM_VERSION=$(yq .version src/chart.yaml)" >> $GITHUB_ENV        
+          echo "VERSION=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV        
       - name: echo version
         run: |
-          echo $GV_PLATFORM_VERSION
+          echo $VERSION
       - name: echoversion
         run: |
-          echo ${{ env.GV_PLATFORM_VERSION }}
+          echo ${{ env.VERSION }}
+          
+      - id: bumpr
+        name: Calculate next semantic version
+        uses: haya14busa/action-bumpr@v1
+        with:
+          default_bump_level: patch
+          dry_run: true
+          
+      - name: Non RC - get version number
+        id: get_version_master
+        run: |
+          VERSION=${{ steps.bumpr.outputs.next_version }}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Print version number
+        id: output_version
+        run: |
+          echo "$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+ 
