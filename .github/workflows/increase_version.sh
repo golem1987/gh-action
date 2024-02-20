@@ -45,4 +45,4 @@ else
     echo "::set-output name=stdout::New chart version $NEW_VERSION"
 fi
 
-echo $value
+echo $NEW_VERSION
