@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: develop
+          
       - name: testv
         run: |
           echo "VERSION=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV        
@@ -32,5 +35,13 @@ jobs:
           NEW_VERSION="$MAJOR.$MINOR.$PATCH"
           echo "Current version: $CURRENT_VERSION"
           echo "New version: $NEW_VERSION"
-          sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" ./Chart.yaml
+
+      - name: Checkout master branch
+        uses: actions/checkout@v2
+        with:
+          ref: 'main'
+
+      - name: Replace version
+        run: |
+          sed -i "/^version:/c\version: $NEW_VERSION" ./Chart.yaml
  
