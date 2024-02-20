@@ -38,7 +38,6 @@ jobs:
           ref: ${{ github.ref }}
       - name: Update Chart.yaml with the new version
         run: |
-          NEW_VERSION="${{ github.event.inputs.newVersion }}"
           echo "version: ${{ env.NEW_VERSION }}" >> ./Chart.yaml
       - name: TEST
         run: |
