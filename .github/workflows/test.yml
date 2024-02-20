@@ -11,7 +11,7 @@ jobs:
   
       - name: Check Develop Version and bump
         run: |
-          echo "CURRENT_VERSION_DEVELOP=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV 
+          echo "VERSION_DEVELOP=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV 
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
@@ -20,6 +20,7 @@ jobs:
           echo "VERSION_CURRENT=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV 
       - name: Run version increase
         run: |
+          ./increase_version.sh $VERSION_DEVELOP $VERSION_CURRENT
         
       - name: Update Chart.yaml with the new version
         run: |
