@@ -25,7 +25,7 @@ jobs:
         
       - name: Update Chart.yaml with the new version
         run: |
-          echo "version: ${{ env.NEW_VERSION }}" >> ./Chart.yaml
+          echo "version: ${{ env.NEWVERSION }}" >> ./Chart.yaml
       - name: TEST
         run: |
           cat ./Chart.yaml
