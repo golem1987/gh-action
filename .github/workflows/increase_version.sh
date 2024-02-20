@@ -45,4 +45,4 @@ else
     echo "::set-output name=stdout::New chart version $NEW_VERSION"
 fi
 
-echo $NEW_VERSION
+echo "NEWVERSION=$NEW_VERSION" >> $GITHUB_ENV
