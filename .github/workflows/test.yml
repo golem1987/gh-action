@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: develop
+          ref: 'develop'
           
       - name: testv
         run: |
@@ -36,12 +36,17 @@ jobs:
           echo "Current version: $CURRENT_VERSION"
           echo "New version: $NEW_VERSION"
 
-      - name: Checkout master branch
-        uses: actions/checkout@v2
-        with:
-          ref: 'main'
+        - name: Checkout back to the original branch
+          uses: actions/checkout@v2
+          with:
+            ref: ${{ github.ref }}
+  
+        - name: Update Chart.yaml with the new version
+          run: |
+            NEW_VERSION="${{ github.event.inputs.newVersion }}"
+            echo "version: $NEW_VERSION" >> ./Chart.yaml
 
-      - name: Replace version
-        run: |
-          sed -i "/^version:/c\version: $NEW_VERSION" ./Chart.yaml
+        - name: TEST
+          run: |
+            cat ./Chart.yaml
  
