@@ -15,28 +15,19 @@ jobs:
       - name: echoversion
         run: |
           echo ${{ env.VERSION }}
-          
-      - id: bumpr
-        name: Calculate next semantic version
-        uses: haya14busa/action-bumpr@v1
-        with:
-          default_bump_level: patch
-          dry_run: true
 
       - name: echoversion
         run: |
           echo ${{ env.VERSION }}
           
-      - name: Non RC - get version number
-        id: get_version_master
-        run: |
-          VERSION=${{ steps.bumpr.outputs.next_version }}
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+    - name: Bump Minor Version
+      run: |
 
-      - name: Print version number
-        id: output_version
-        run: |
-          echo "$VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        CURRENT_VERSION=$(yq .version ./Chart.yaml)
+        MAJOR=${CURRENT_VERSION[0]}
+        MINOR=$((CURRENT_VERSION[1]+1))
+        NEW_VERSION="$MAJOR.$MINOR"
+        echo "Current version: $CURRENT_VERSION"
+        echo "New version: $NEW_VERSION"
+        sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" ./Chart.yaml
  
