@@ -24,7 +24,7 @@ jobs:
       - name: Bump Minor Version
         run: |
           CURRENT_VERSION=$(yq .version ./Chart.yaml)
-          echo $CURRENT_VERSION
+          echo ${{ env.CURRENT_VERSION }}
           IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
           MAJOR=${MAJOR}
           MINOR=${MINOR}
@@ -39,7 +39,7 @@ jobs:
       - name: Update Chart.yaml with the new version
         run: |
           NEW_VERSION="${{ github.event.inputs.newVersion }}"
-          echo "version: $NEW_VERSION" >> ./Chart.yaml
+          echo "version: ${{ env.NEW_VERSION }}" >> ./Chart.yaml
       - name: TEST
         run: |
           cat ./Chart.yaml
