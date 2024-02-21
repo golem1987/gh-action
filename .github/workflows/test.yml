@@ -47,7 +47,7 @@ jobs:
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
         if: ${{ env.VER_RELEASE }} == 'minor'
-        run: echo "{{ env.VER_RELEASE }}-RCCCCCCCC
+        run: echo "{{ env.VER_RELEASE }}-RCCCCCCCC"
         with:
           labels: bump:minor
   
