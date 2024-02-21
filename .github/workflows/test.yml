@@ -45,15 +45,15 @@ jobs:
 
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
-        if: ${{ env.VER_RELEASE }} == minor
+        if: ${{ env.VER_RELEASE }}=minor
         with:
-          labels: bump:minor
+          labels: bump: minor
 
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
-        if: ${{ env.VER_RELEASE }} == major
+        if: ${{ env.VER_RELEASE }}=major
         with:
-          labels: bump:major
+          labels: bump: major
   
       - name: Update Chart.yaml with the new version
         run: |
