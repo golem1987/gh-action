@@ -40,9 +40,13 @@ if [[ "$MAJOR_DEVELOP" == "$MAJOR_BRANCH" && "$MINOR_DEVELOP" == "$MINOR_BRANCH"
     PATCH_DEVELOP=$((PATCH_DEVELOP+1))
     NEW_VERSION="$MAJOR_DEVELOP.$MINOR_DEVELOP.$PATCH_DEVELOP" 
     echo "::set-output name=stdout::New chart version $NEW_VERSION"
+    VERSION=minor
+    
 else
     NEW_VERSION=$BRANCH_VERSION
     echo "::set-output name=stdout::New chart version $NEW_VERSION"
+    VERSION=major
 fi
 
 echo "NEWVERSION=$NEW_VERSION" >> $GITHUB_ENV
+echo "VER_RELEASE=$VERSION" >> $GITHUB_ENV 
