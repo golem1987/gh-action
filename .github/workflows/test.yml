@@ -46,7 +46,7 @@ jobs:
 
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
-        if: $VER_RELEASE == 'major'
+        if: env.VER_RELEASE == 'major'
         with:
           labels: bump:major
   
