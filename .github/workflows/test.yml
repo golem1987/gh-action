@@ -58,7 +58,7 @@ jobs:
   
       - name: Update Chart.yaml with the new version
         run: |
-          echo "version: ${{ env.NEWVERSION }}" >> ./Chart.yaml
+          sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
       - name: TEST
         run: |
           cat ./Chart.yaml
