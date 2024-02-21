@@ -48,12 +48,6 @@ jobs:
         if: env.VER_RELEASE == 'minor'
         with:
           labels: bump:minor
-
-      - name: Major Version
-        uses: actions-ecosystem/action-add-labels@v1
-        if: env.VER_RELEASE == 'major'
-        with:
-          labels: bump:major
   
       - name: Update Chart.yaml with the new version
         run: |
