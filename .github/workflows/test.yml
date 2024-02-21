@@ -13,6 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: 'develop'
+      - name: Check Develop Version and bump
+        run: |
+          echo "VERSION_DEVELOP=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV 
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: Check Current Branch Version
+        run: |
+          echo "VERSION_CURRENT=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV       
       - name: Check modified files
         id: check-modified-files
         uses: tj-actions/changed-files@v23.1
@@ -22,7 +33,6 @@ jobs:
           files_ignore: |
             /platform/fleet.yaml
             /platform/Chart.yaml
-
       - name: Compare Chart versions
         if: steps.check-modified-files.outputs.any_modified == 'true'
         id: compare_chart_version
@@ -30,8 +40,6 @@ jobs:
           for file in ${{ steps.check-modified-files.outputs.all_modified_files }}; do
             echo "- $file has changed"
           done
-          VERSION_CURRENT=$(yq e '.version' ./Chart.yaml)
-          VERSION_DEVELOP=$(git show origin/develop:./Chart.yaml | yq e '.version')
           chmod +x ./.github/workflows/increase_version.sh
           ./.github/workflows/increase_version.sh $VERSION_DEVELOP $VERSION_CURRENT
 
