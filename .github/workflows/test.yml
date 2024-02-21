@@ -3,7 +3,10 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-      - master
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -34,13 +37,13 @@ jobs:
 
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
-        if: $VERSION == minor
+        if: ${{ env.VERSION }} == minor
         with:
           labels: bump:minor
 
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
-        if: $VERSION == major
+        if: ${{ env.VERSION }} == major
         with:
           labels: bump:major
   
