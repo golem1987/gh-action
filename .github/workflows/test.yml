@@ -44,11 +44,17 @@ jobs:
           chmod +x ./.github/workflows/increase_version.sh
           ./.github/workflows/increase_version.sh $VERSION_DEVELOP $VERSION_CURRENT
 
-      - name: Minor Version
+      - name: Major Version
         uses: actions-ecosystem/action-add-labels@v1
-        if: ${{ env.VER_RELEASE }} == 'major'
+        if: env.VER_RELEASE == 'major'
         with:
           labels: bump:major
+  
+      - name: Minor Version
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.VER_RELEASE == 'minor'
+        with:
+          labels: bump:minor
   
       - name: Update Chart.yaml with the new version
         run: |
