@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -exu
+set -eu
 
 DEVELOP_VERSION=$1
 BRANCH_VERSION=$2
@@ -35,7 +35,7 @@ MINOR_BRANCH=${MINOR}
 PATCH_BRANCH=${PATCH}
 BRANCH_VERSION="$MAJOR_BRANCH.$MINOR_BRANCH.$PATCH_BRANCH" 
 
-if [["$MAJOR_DEVELOP" < "$MAJOR_BRANCH" || "$MINOR_DEVELOP" < "$MINOR_BRANCH"]]; then
+if [[ "$MAJOR_DEVELOP" < "$MAJOR_BRANCH" || "$MINOR_DEVELOP" < "$MINOR_BRANCH" ]]; then
     echo "Major Version cannot be decreased"
     exit 1
 elif [[ "$MAJOR_DEVELOP" == "$MAJOR_BRANCH" && "$MINOR_DEVELOP" == "$MINOR_BRANCH" ]]; then
