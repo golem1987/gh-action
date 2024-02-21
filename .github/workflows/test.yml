@@ -45,7 +45,7 @@ jobs:
 
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
-        if: env.VER_RELEASE == 'minor'
+        if: ${{ env.VER_RELEASE }} == 'minor'
         with:
           labels: bump:minor
   
