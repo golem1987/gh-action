@@ -46,10 +46,9 @@ jobs:
 
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
-        if: ${{ env.VER_RELEASE }} == 'minor'
-        run: echo "{{ env.VER_RELEASE }}-RCCCCCCCC
+        if: ${{ env.VER_RELEASE }} == 'major'
         with:
-          labels: bump:minor
+          labels: bump:major
   
       - name: Update Chart.yaml with the new version
         run: |
