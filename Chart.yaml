@@ -1,4 +1,4 @@
-version: 0.11.80
+version: 0.14.37
 apiVersion: v2
 name: gv-platform
 description: GetVisibility Platform
