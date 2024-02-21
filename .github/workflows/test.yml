@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
 
 jobs:
   deploy:
@@ -29,6 +26,7 @@ jobs:
         uses: tj-actions/changed-files@v23.1
         with:
           files: |
+            /.github/*
             /platform/*
           files_ignore: |
             /platform/fleet.yaml
@@ -46,6 +44,8 @@ jobs:
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
         if: ${{ env.VER_RELEASE }} == 'minor'
+        run:
+          echo "${{ env.VER_RELEASE }}-RC"
         with:
           labels: bump:minor
   
