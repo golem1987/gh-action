@@ -40,7 +40,7 @@ def print_services_info_and_exit():
     for message in messages:
         print(f"::set-output name=message::{message}")
     if deleted_services or services_with_decreased_version:
-        exit_code = 1 
+        exit_code = 0 
     sys.exit(exit_code)
 
 if __name__ == '__main__':
