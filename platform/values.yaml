@@ -453,7 +453,7 @@ regexService:
 scanManager:
   products:
     - enterprise
-  imageTag: 5.17.3
+  imageTag: 5.12.3
   replicas: 1
   teamOwner: quest
   teamLead: pkonstanczuk
