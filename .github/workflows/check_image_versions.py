@@ -60,7 +60,9 @@ if __name__ == '__main__':
     if services_with_decreased_version:
         dec_version = 1
 
+    deleted_str=', '.join(deleted)
+    decreased_str=', '.join(decreased)
     print(f"::set-output name=del_service::{del_service}")
     print(f"::set-output name=dec_version::{dec_version}")
-    print(f"::set-output name=dec_ver_msg::{', '.join(deleted)}")
-    print(f"::set-output name=del_ver_msg::{', '.join(decreased)}")
+    print(f"::set-output name=dec_ver_msg::{deleted_str}")
+    print(f"::set-output name=del_ver_msg::{decreased_str}")
