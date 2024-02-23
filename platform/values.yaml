@@ -454,7 +454,7 @@ regexService:
     - synergy
     - focus
     - enterprise
-  imageTag: 2.11.2
+  imageTag: 2.10.2
   replicas: 1
   teamOwner: quest
   teamLead: pkonstanczuk
@@ -486,12 +486,3 @@ trusteesManager:
   teamOwner: quest
   teamLead: pkonstanczuk
   gitRepository: trustees-management
-webhookManager:
-  products:
-    - focus
-    - enterprise
-  imageTag: 2.7.9
-  replicas: 1
-  teamOwner: quest
-  teamLead: pkonstanczuk
-  gitRepository: webhook-manager

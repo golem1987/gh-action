@@ -52,11 +52,22 @@ jobs:
 
       - name: Print messages from script
         run: |
-          echo "Messages from Python script:"
           echo "${{ steps.checking_images.outputs.messages }}"
           echo "DEL_SERVICE=${{ steps.checking_images.outputs.del_service }}" >> GITHUB_ENV
           echo "DEC_VERSION=${{ steps.checking_images.outputs.dec_version }}" >> GITHUB_ENV
-          
+
+      - name: Deleted Services Labels
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.DEL_SERVICE == 1
+        with:
+          labels: DeletedService
+
+      - name: Decreased Service
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.DEC_VERSION == 0
+        with:
+          labels: DecreasedServiceVersion
+
       - name: Conditional stop
-        if: ${{ failure() }}
-        run: echo "The workflow was stopped due to failure conditions in the script."      
+        if: env.DEL_SERVICE == 1 or env.DEC_VERSION == 1
+        run: exit 1      
