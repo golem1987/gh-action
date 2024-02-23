@@ -33,7 +33,12 @@ jobs:
 
       - name: Install PyYAML
         run: pip install pyyaml
+      
+      - name: Copy files to /tmp
+        run: |
+          cp base/platform/values.yaml /tmp/basevalues.yaml
+          cp pr/platform/values.yaml  /tmp.basevalues.yaml
 
       - name: Compare image tags inside of values.yaml
         run: |
-          python3 pr/.github/workflows/check_image_versions.py base/platform/Chart.yaml pr/platform/Chart.yaml
+          python3 pr/.github/workflows/check_image_versions.py base/platform/values.yaml pr/platform/values.yaml
