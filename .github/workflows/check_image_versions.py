@@ -3,6 +3,7 @@ import sys
 
 deleted_services = []
 services_with_decreased_version=[]
+messages = []
 del_service = 0
 dec_version = 0
 
@@ -43,7 +44,6 @@ def print_services_info_and_exit():
         print(f"::set-output name=messages::{message}")
 #    if deleted_services or services_with_decreased_version:
 #        exit_code = 0
-    print(f"::set-output name=msg::{messages}")
 #    sys.exit(exit_code)
 
 if __name__ == '__main__':
@@ -65,6 +65,6 @@ if __name__ == '__main__':
         del_service = 1
     if services_with_decreased_version:
         dec_version = 1
-
+    print(f"::set-output name=msg::{messages}")
     print(f"::set-output name=del_service::{del_service}")
     print(f"::set-output name=dec_version::{dec_version}")
