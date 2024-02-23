@@ -30,7 +30,7 @@ jobs:
         if: steps.check-modified-files.outputs.any_modified == 'true'
         run: |
           git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
-      
+          "REMOTE_VERSION=$(git show origin/develop:platform/Chart.yaml | yq e '.version')"  >> $GITHUB_ENV
       - name: Extract branch name
         shell: bash
         run: |
@@ -54,19 +54,18 @@ jobs:
         id: bump_minor
         if: startsWith(env.BRANCH_NAME, 'minorVersion')
         with:
-          chart-path: /tmp
+          source: /tmp
           app_version: false
           level: minor
 
       - name: Bump a Helm Chart Version Locally
-        uses: beehivewarrior/bump_helm@main
+        uses: TomerFi/version-bumper-action@master
         id: bump_major
         if: startsWith(env.BRANCH_NAME, 'majorVersion')
         with:
-          chart_name: /tmp
-          app_version: false
-          bump_strategy: major
+          source: $REMOTE_VERSION
+          bump: major
 
       - name: Test
         shell: bash
-        run: echo "VV=${{ steps.bump_major.outputs.version_bumped }}" 
+        run: echo "VV=${{ steps.bump_major.outputs.bump }}" 
