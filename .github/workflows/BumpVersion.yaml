@@ -33,7 +33,12 @@ jobs:
       
       - name: Extract branch name
         shell: bash
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+        run: |
+          if [[ $GITHUB_REF == refs/pull/* ]]; then
+            echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+          else
+            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          fi
       
       - name: Bump a Helm Chart Version Locally
         uses: explorium-ai/bump-helm-chart-action@main
