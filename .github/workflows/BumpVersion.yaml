@@ -40,7 +40,7 @@ jobs:
       - name: Bump a Helm Chart Version Locally
         uses: explorium-ai/bump-helm-chart-action@main
         with:
-          chart-path: origin/develop:platform/Chart.yaml
+          chart-path: origin/develop:platform
           app_version: false
           level: patch
 
