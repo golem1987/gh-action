@@ -1,0 +1,66 @@
+name: Increase Version
+on:
+  workflow_dispatch:
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Check modified files
+        id: check-modified-files
+        uses: tj-actions/changed-files@v23.1
+        with:
+          files: |
+            /platform/*
+          files_ignore: |
+            /platform/fleet.yaml
+            /platform/Chart.yaml
+
+      - name: Compare Chart versions
+        if: steps.check-modified-files.outputs.any_modified == 'true'
+        id: compare_chart_version
+        run: |
+          echo "PR_VERSION=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV
+          echo "REMOTE_VERSION=$(git show origin/develop:platform/Chart.yaml | yq e '.version')" >> $GITHUB_ENV
+          chmod +x ./.github/workflows/increase_version.sh
+          ./.github/increase_version.sh $VERSION_DEVELOP $VERSION_CURRENT
+
+      - name: Bump a Helm Chart Version Locally
+        uses: explorium-ai/bump-helm-chart-action@main
+        with:
+          chart-path: git show origin/develop:platform/Chart.yaml
+          app_version: false
+          level: patch
+
+
+      - name: Major Version
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.VER_RELEASE == 'major'
+        with:
+          labels: majorVersion
+
+      - name: Minor Version
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.VER_RELEASE == 'minor'
+        with:
+          labels: minorVersion
+
+      - name: Update Chart.yaml with the new version
+        run: |
+          sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
+      - name: TEST
+        run: |
+          cat ./Chart.yaml
