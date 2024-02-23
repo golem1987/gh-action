@@ -14,6 +14,8 @@ jobs:
   check:
     name: check_image_versions
     runs-on: ubuntu-20.04
+    outputs:
+      messages: ${{ steps.script.check_images.messages }}
     steps:
       - name: Checkout Base branch
         uses: actions/checkout@v3
@@ -37,8 +39,19 @@ jobs:
       - name: Copy files to /tmp
         run: |
           cp base/platform/values.yaml /tmp/basevalues.yaml
-          cp pr/platform/values.yaml  /tmp/basevalues.yaml
+          cp pr/platform/values.yaml  /tmp/prvalues.yaml
 
       - name: Compare image tags inside of values.yaml
+        id: checking_images
         run: |
-          python3 pr/.github/workflows/check_image_versions.py base/platform/values.yaml pr/platform/values.yaml
+          python3 pr/.github/workflows/check_image_versions.py
+          echo "Checking images script exit code $?"
+
+      - name: Print messages from script
+        run: |
+          echo "Messages from Python script:"
+          echo "${{ steps.checking_images.outputs.messages }}
+
+      - name: Conditional stop
+        if: ${{ failure() }}
+        run: echo "The workflow was stopped due to failure conditions in the script."      

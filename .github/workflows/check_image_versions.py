@@ -44,11 +44,11 @@ def print_services_info_and_exit():
     sys.exit(exit_code)
 
 if __name__ == '__main__':
-    main_chart_path = sys.argv[1]
-    pr_chart_path = sys.argv[2]
+#    main_chart_path = sys.argv[1]
+#    pr_chart_path = sys.argv[2]
 
-    main_values = parse_yaml(main_chart_path)
-    pr_values = parse_yaml(pr_chart_path)
+    main_values = parse_yaml("/tmp/basevalues.yaml")
+    pr_values = parse_yaml("/tmp/prvalues.yaml")
 
     pr_dict=new_dict(pr_values)
     master_dict=new_dict(main_values)
