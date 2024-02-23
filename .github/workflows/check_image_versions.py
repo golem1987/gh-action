@@ -62,11 +62,12 @@ if __name__ == '__main__':
     
     del_service = 0
     dec_version = 0
-    
+
     if deleted_services:
         del_service = 1
     if services_with_decreased_version:
         dec_version = 1
+        
     print(f"::set-output name=msg::{messages}")
     print(f"::set-output name=del_service::{del_service}")
     print(f"::set-output name=dec_version::{dec_version}")
