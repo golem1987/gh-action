@@ -1,0 +1,44 @@
+name: Check Image Versions
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  check:
+    name: check_image_versions
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Base branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
+          path: base
+          
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          path: pr
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Compare image tags inside of values.yaml
+        run: |
+          pwd
+          ls
+          ls .
+          ls ./.github
+          ls ./.github/workflows
+          python3 ./.github/workflows/check_image_versions.py base/platform/Chart.yaml pr/platform/Chart.yaml
