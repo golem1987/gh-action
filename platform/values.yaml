@@ -1,0 +1,509 @@
+high_available: false
+consul:
+  host: gv-essentials-consul-server
+  port: 8500
+rbacConfiguration:
+  clustersEnabled: rocketdev,enterpriseqa,questdev
+kafka:
+  host: gv-kafka-cluster-kafka-bootstrap
+  certSecretName: gv-kafka-cluster-cluster-ca-cert
+  broker: gv-kafka-cluster-kafka-brokers
+elasticsearch:
+  host: gv-es-http
+  port: 9200
+  credsSecretName: gv-es-elastic-user
+  labels:
+    app.kubernetes.io/name: elasticsearch
+postgres:
+  host: gv-postgresql
+  credsSecretName: gv.gv-postgresql.credentials.postgresql.acid.zalan.do
+  labels:
+    app.kubernetes.io/name: postgresql
+minio:
+  host: gv-essentials-minio
+  port: 9000
+  credsSecretName: gv-essentials-minio
+  teamOwner: platform
+  teamLead: ilvar
+  gitRepository: rancher-charts
+alert:
+  teamOwner: platform
+  teamLead: ilvar
+  gitRepository: rancher-monitoring
+autoUpdateServer:
+  products:
+    - synergy
+    - enterprise
+  imageTag: 3.5.11
+  replicas: 1
+  ha:
+    replicas: 4
+  teamOwner: delta
+  teamLead: dtgetvisibility
+  gitRepository: office-classifier
+classifier:
+  products:
+    - synergy
+    - focus
+    - enterprise
+  imageTag: 1.3.15
+  replicas: 2
+  ha:
+    replicas: 8
+  classifier_v3:
+    imageTag: 2.6.11
+  teamOwner: ds
+  teamLead: vconstantgetvisibility
+  gitRepository: ds-ml2
+connectorGoogle:
+  products:
+    - focus
+    - enterprise
+  imageTag: 2.8.0
+  replicas: 1
+  teamOwner: envision
+  teamLead: azzRadhia
+  gitRepository: connector-google
+connectorOnedrive:
+  products:
+    - focus
+    - enterprise
+  imageTag: 1.17.0
+  replicas: 1
+  teamOwner: envision
+  teamLead: azzRadhia
+  gitRepository: connector-onedrive
+connectorGeneric:
+  products:
+    - focus
+    - enterprise
+  imageTag: 4.64.4
+  replicas: 1
+  teamOwner: envision
+  teamLead: azzRadhia
+  gitRepository: connector-generic
+connectorSharepoint:
+  products:
+    - focus
+    - enterprise
+  imageTag: 1.22.0
+  replicas: 1
+  teamOwner: envision
+  teamLead: azzRadhia
+  gitRepository: connector-sharepoint
+connectorSmb:
+  products:
+    - focus
+    - enterprise
+  imageTag: 3.12.0
+  replicas: 1
+  teamOwner: envision
+  teamLead: azzRadhia
+  gitRepository: connector-smb
+dashboard:
+  products:
+    - synergy
+    - focus
+    - enterprise
+  imageTag: 3.196.0
+  replicas: 1
+  ha:
+    replicas: 2
+  teamOwner: rocket
+  teamLead: KutsenkoA
+  gitRepository: dashboard
+  config:
+    featureFlags:
+      dashboard:
+        enabled:
+          - enterprise
+          - focus
+        scanProgress:
+          - enterprise
+          - focus
+        exploreFiles:
+          - enterprise
+          - focus
+        exploreTrustees:
+          - enterprise
+          - focus
+        manualClassification:
+          - enterprise
+          - focus
+        mlTagTraining:
+          - enterprise
+          - focus
+        reportBranding:
+          - enterprise
+          - focus
+        survey:
+          - enterprise
+          - focus
+      agent:
+        enabled:
+          - enterprise
+          - synergy
+        overview:
+          - enterprise
+          - synergy
+        analytics:
+          - enterprise
+          - synergy
+        agentConfiguration:
+          - enterprise
+          - synergy
+        agentManagement:
+          - enterprise
+          - synergy
+        managementExportJobs:
+          - enterprise
+          - synergy
+        agentActivity:
+          - enterprise
+          - synergy
+        download:
+          - enterprise
+          - synergy
+        plugins:
+          - enterprise
+          - synergy
+        system:
+          - enterprise
+          - synergy
+        macros:
+          - enterprise
+          - synergy
+        import:
+          - enterprise
+          - synergy
+        reports: false
+        reportBranding: true
+        deescalationPolicies:
+          - enterprise
+          - synergy
+      analytics:
+        enabled: true
+        multiColumn: true
+      datasets:
+        files:
+          - enterprise
+          - focus
+        agents:
+          - enterprise
+          - synergy
+        activities:
+          - enterprise
+          - synergy
+        trustees:
+          - enterprise
+      administration:
+        enabled: true
+        connections:
+          enabled:
+            - enterprise
+            - focus
+          requestConnector: true
+          connectors:
+            awsIam:
+              enabled: true
+              scanContainers: false
+              scanTrustees: true
+              tagging: false
+            awsS3:
+              enabled: true
+              scanContainers: true
+              scanTrustees: false
+              tagging: true
+            azureAd:
+              enabled: true
+              scanContainers: false
+              scanTrustees: true
+              tagging: false
+            azureBlob:
+              enabled: true
+              scanContainers: true
+              scanTrustees: false
+              tagging: true
+            azureFiles:
+              enabled: true
+              scanContainers: true
+              scanTrustees: false
+              tagging: true
+            box:
+              enabled: true
+              scanContainers: true
+              scanTrustees: true
+              tagging: true
+            confluenceCloud:
+              enabled: true
+              scanContainers: true
+              scanTrustees: true
+              tagging: true
+            googleDrive:
+              enabled: true
+              scanContainers: true
+              scanTrustees: false
+              tagging: true
+            googleIam:
+              enabled: true
+              scanContainers: false
+              scanTrustees: true
+              tagging: false
+            ldap:
+              enabled: true
+              scanContainers: false
+              scanTrustees: true
+              tagging: false
+            onedrive:
+              enabled: true
+              scanContainers: true
+              scanTrustees: false
+              tagging: true
+            sharepointOnline:
+              enabled: true
+              scanContainers: true
+              scanTrustees: false
+              tagging: true
+            sharepointOnPrem:
+              enabled: true
+              scanContainers: true
+              scanTrustees: false
+              tagging: true
+            smb:
+              enabled: true
+              scanContainers: true
+              scanTrustees: false
+              tagging: true
+        regexEditor: true
+        webhooks:
+          - enterprise
+          - focus
+        userManagement: true
+        proxySettings:
+          - enterprise
+          - focus
+        languageSettings: true
+        detectors:
+          - enterprise
+          - focus
+      dataGuard:
+        enabled: false
+        about:
+          enabled: false
+          companySettings: false
+          complianceStandards: false
+          classificationPolicy: false
+          taxonomy: false
+          departments: false
+          fieldsConfiguration: false
+        dataControl:
+          enabled: false
+        dataHandling:
+          enabled: false
+        wizard:
+          enabled: false
+gvKeycloak:
+  products:
+    - synergy
+    - focus
+    - enterprise
+  imageTag: 22-1.1.3
+  replicas: 1
+  ha:
+    replicas: 2
+  teamOwner: envision
+  teamLead: azzRadhia
+  gitRepository: gv-keycloak
+integrationGeneric:
+  products:
+    - focus
+    - enterprise
+  imageTag: 1.3.0
+  replicas: 1
+  teamOwner: envision
+  teamLead: azzRadhia
+  gitRepository: integration-generic
+pdfGenerator:
+  products:
+    - synergy
+    - focus
+    - enterprise
+  replicas: 1
+  ha:
+    replicas: 2
+  teamOwner: rocket
+  teamLead: KutsenkoA
+  gitRepository: pdf-generator
+riskService:
+  products:
+    - focus
+    - enterprise
+  imageTag: 0.5.3
+  replicas: 1
+  teamOwner: envision
+  teamLead: azzRadhia
+  gitRepository: risk
+system:
+  teamOwner: platform
+  teamLead: ilvar
+  gitRepository: NotApplicable
+staticServer:
+  products:
+    - synergy
+    - enterprise
+  imageTag: 0.1.1
+  replicas: 1
+  ha:
+    replicas: 4
+  teamOwner: delta
+  teamLead: dtgetvisibility
+  gitRepository: office-classifier-web
+auth_jwt_middleware:
+  port: 8085
+  imageTag: 0.0.7
+  servicename: auth-jwt
+  middlewarename: auth-jwt
+  teamOwner: platform
+  teamLead: ilvar
+  gitRepository: auth-jwt-middleware
+disable_cors_gvdev: false
+otelCollector:
+  products:
+    - synergy
+    - enterprise
+  imageTag: 0.87.0-0.0.1
+  replicas: 1
+  teamOwner: delta
+  teamLead: dtgetvisibility
+  gitRepository: gv-otel-collector
+flink:
+  imageTag: 1.16.0-0.2.1
+  replicas: 1
+  ha:
+    replicas: 3
+    numberOfTaskSlots: 50
+  teamOwner: platform
+  teamLead: ilvar
+  gitRepository: flink
+agentEdge:
+  products:
+    - synergy
+    - focus
+    - enterprise
+  imageTag: 2.8.27
+  replicas: 1
+  ha:
+    replicas: 4
+  teamOwner: pkonstanczuk
+  teamLead: quest
+  gitRepository: agent-edge
+agentSwarm:
+  products:
+    - synergy
+    - enterprise
+  imageTag: 0.2.2
+  replicas: 0
+  teamOwner: pkonstanczuk
+  teamLead: quest
+  gitRepository: agent-swarm
+analyticsHub:
+  products:
+    - synergy
+    - focus
+    - enterprise
+  imageTag: 1.15.2
+  replicas: 1
+  ha:
+    replicas: 2
+  teamOwner: pkonstanczuk
+  teamLead: quest
+  gitRepository: analyticsHub
+classificationPipeline:
+  products:
+    - synergy
+    - focus
+    - enterprise
+  imageTag: 2.33.2
+  replicas: 1
+  ha:
+    replicas: 3
+    parallelism: 20
+    numberOfTaskSlots: 5
+  teamOwner: quest
+  teamLead: pkonstanczuk
+  gitRepository: gv-pipeline-classification
+classificationTagsService:
+  products:
+    - synergy
+    - focus
+    - enterprise
+  imageTag: 1.2.13
+  replicas: 1
+  teamOwner: pkonstanczuk
+  teamLead: quest
+  gitRepository: classification-tags-service
+dataguard:
+  products:
+    - synergy
+    - focus
+    - enterprise
+  imageTag: 1.0.10
+  replicas: 1
+  teamOwner: quest
+  teamLead: pkonstanczuk
+  gitRepository: dataguard
+ocrService:
+  products:
+    - focus
+    - enterprise
+  imageTag: 0.7.10
+  replicas: 1
+  teamOwner: quest
+  teamLead: pkonstanczuk
+  gitRepository: ocr-service
+regexService:
+  products:
+    - synergy
+    - focus
+    - enterprise
+  imageTag: 2.11.2
+  replicas: 1
+  teamOwner: quest
+  teamLead: pkonstanczuk
+  gitRepository: regex-service
+scanManager:
+  products:
+    - focus
+    - enterprise
+  imageTag: 5.17.3
+  replicas: 1
+  teamOwner: quest
+  teamLead: pkonstanczuk
+  gitRepository: scan-manager
+scanDataManager:
+  products:
+    - focus
+    - enterprise
+  imageTag: 5.7.1
+  replicas: 2
+  teamOwner: quest
+  teamLead: pkonstanczuk
+  gitRepository: scan-data-manager
+trusteesManager:
+  products:
+    - focus
+    - enterprise
+  imageTag: 1.3.3
+  replicas: 1
+  teamOwner: quest
+  teamLead: pkonstanczuk
+  gitRepository: trustees-management
+webhookManager:
+  products:
+    - focus
+    - enterprise
+  imageTag: 2.7.9
+  replicas: 1
+  teamOwner: quest
+  teamLead: pkonstanczuk
+  gitRepository: webhook-manager
