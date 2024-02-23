@@ -51,8 +51,8 @@ if __name__ == '__main__':
 #    pr_chart_path = sys.argv[2]
     messages = []
 
-    main_values = parse_yaml("./v.yaml")
-    pr_values = parse_yaml("./n.yaml")
+    main_values = parse_yaml("/tmp/basevalues.yaml")
+    pr_values = parse_yaml("/tmp/prvalues.yaml")
 
     pr_dict=new_dict(pr_values)
     master_dict=new_dict(main_values)
