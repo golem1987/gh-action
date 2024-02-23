@@ -50,7 +50,7 @@ jobs:
           level: patch
 
       - name: Bump a Helm Chart Version Locally
-        uses: beehivewarrior/bump_helm
+        uses: beehivewarrior/bump_helm@main
         id: bump_minor
         if: startsWith(env.BRANCH_NAME, 'minorVersion')
         with:
@@ -59,7 +59,7 @@ jobs:
           level: minor
 
       - name: Bump a Helm Chart Version Locally
-        uses: beehivewarrior/bump_helm
+        uses: beehivewarrior/bump_helm@main
         id: bump_major
         if: startsWith(env.BRANCH_NAME, 'majorVersion')
         with:
