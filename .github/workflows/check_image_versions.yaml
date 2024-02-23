@@ -50,7 +50,7 @@ jobs:
       - name: Print messages from script
         run: |
           echo "Messages from Python script:"
-          echo "${{ steps.checking_images.outputs.messages }}
+          echo "${{ steps.checking_images.outputs.messages }}"
 
       - name: Conditional stop
         if: ${{ failure() }}
