@@ -64,5 +64,5 @@ if __name__ == '__main__':
     decreased_str=', '.join(decreased)
     print(f"::set-output name=del_service::{del_service}")
     print(f"::set-output name=dec_version::{dec_version}")
-    print(f"::set-output name=dec_ver_msg::{deleted_str}")
-    print(f"::set-output name=del_ver_msg::{decreased_str}")
+    print(f"::set-output name=del_ver_msg::{deleted_str}")
+    print(f"::set-output name=dec_ver_msg::{decreased_str}")
