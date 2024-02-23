@@ -38,9 +38,10 @@ def print_services_info_and_exit():
         services_with_decreased_version_str = ', '.join(services_with_decreased_version)
         messages.append(f"Services with decreased version: {services_with_decreased_version_str}")
     for message in messages:
-        print(f"::set-output name=message::{message}")
+        print(f"::set-output name=messages::{message}")
     if deleted_services or services_with_decreased_version:
-        exit_code = 0 
+        exit_code = 0
+    print(f"::set-output name=msg::{messages}")
     sys.exit(exit_code)
 
 if __name__ == '__main__':
