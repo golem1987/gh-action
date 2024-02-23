@@ -69,8 +69,16 @@ jobs:
         with:
           labels: DecreasedServiceVersion
 
-      - name: Conditional stop
-        if: ${{ env.DEL_SERVICE == '1' || env.DEC_VERSION == '1' }}
-        run:
-          echo "" 
-          exit 1   
+      - name: Conditional stop and message
+        run: |
+          if [ "${{ env.DEL_SERVICE }}" == "1" ]; then
+            echo "${{ steps.checking_images.outputs.del_ver_msg }}"
+          fi
+          if [ "${{ env.DEC_VERSION }}" == "1" ]; then
+            echo "${{ steps.checking_images.outputs.dec_ver_msg }}"
+          fi
+          if [ "${{ env.DEL_SERVICE }}" == "1" ] || [ "${{ env.DEC_VERSION }}" == "1" ]; then
+            echo "Workflow fail as there is deleted services or decreased version for image tag"
+            exit 1
+          fi
+        shell: bash
