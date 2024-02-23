@@ -52,8 +52,8 @@ jobs:
 
       - name: Print messages from script
         run: |
-          echo "DEC_LIST=${{ steps.checking_images.outputs.dec_ver_msg }}"
-          echo "DEL_LIST=${{ steps.checking_images.outputs.del_ver_msg }}"
+          echo "${{ steps.checking_images.outputs.dec_ver_msg }}"
+          echo "${{ steps.checking_images.outputs.del_ver_msg }}"
           echo "DEL_SERVICE=${{ steps.checking_images.outputs.del_service }}" >> $GITHUB_ENV
           echo "DEC_VERSION=${{ steps.checking_images.outputs.dec_version }}" >> $GITHUB_ENV
 
