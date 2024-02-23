@@ -54,8 +54,9 @@ jobs:
         run: |
           sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
           git config --global user.email "git@gv.com"
-          git config --global user.name "GIT"          
-          git commit -am Update Chart.yaml version to $NEWVERSION
+          git config --global user.name "GIT"
+          git add ./Chart.yaml
+          git commit -m "Update Chart.yaml version to $NEWVERSION"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
