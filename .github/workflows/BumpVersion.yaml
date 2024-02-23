@@ -33,7 +33,7 @@ jobs:
         id: compare_chart_version
         run: |
           echo "PR_VERSION=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV
-          echo "REMOTE_VERSION=$(git show origin/develop:platform/Chart.yaml | yq e '.version')" >> $GITHUB_ENV
+          echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')" >> $GITHUB_ENV
           chmod +x ./.github/increase_version.sh
           ./.github/increase_version.sh $VERSION_DEVELOP $VERSION_CURRENT
 
