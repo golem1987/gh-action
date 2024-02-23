@@ -45,6 +45,7 @@ jobs:
         id: checking_images
         run: |
           python3 pr/.github/workflows/check_image_versions.py
+          echo "${{ steps.checking_images.outputs.messages }}"
           echo "Checking images script exit code $?"
 
       - name: Print messages from script

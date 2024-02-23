@@ -385,18 +385,6 @@ flink:
   teamOwner: platform
   teamLead: ilvar
   gitRepository: flink
-agentEdge:
-  products:
-    - synergy
-    - focus
-    - enterprise
-  imageTag: 2.8.27
-  replicas: 1
-  ha:
-    replicas: 4
-  teamOwner: pkonstanczuk
-  teamLead: quest
-  gitRepository: agent-edge
 agentSwarm:
   products:
     - synergy
