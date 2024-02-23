@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       messages: ${{ steps.checking_images.outputs.msg }}
+      del_service: ${{ steps.checking_images.outputs.del_service }}
+      dec_version: ${{ steps.checking_images.outputs.dec_version }}
     steps:
       - name: Checkout Base branch
         uses: actions/checkout@v3
@@ -52,7 +54,9 @@ jobs:
         run: |
           echo "Messages from Python script:"
           echo "${{ steps.checking_images.outputs.messages }}"
-
+          echo "DEL_SERVICE=${{ steps.checking_images.outputs.del_service }}" >> GITHUB_ENV
+          echo "DEC_VERSION=${{ steps.checking_images.outputs.dec_version }}" >> GITHUB_ENV
+          
       - name: Conditional stop
         if: ${{ failure() }}
         run: echo "The workflow was stopped due to failure conditions in the script."      

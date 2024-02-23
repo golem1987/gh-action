@@ -3,6 +3,8 @@ import sys
 
 deleted_services = []
 services_with_decreased_version=[]
+del_service = 0
+dec_version = 0
 
 def parse_yaml(file_path):
     with open(file_path, 'r') as file:
@@ -58,3 +60,11 @@ if __name__ == '__main__':
     check_for_deleted_services(master_dict, pr_dict)
 
     print_services_info_and_exit()
+
+    if deleted_services:
+        del_service = 1
+    if services_with_decreased_version:
+        dec_version = 1
+
+    print(f"::set-output name=del_service::{del_service}")
+    print(f"::set-output name=dec_version::{dec_version}")
