@@ -36,9 +36,4 @@ jobs:
 
       - name: Compare image tags inside of values.yaml
         run: |
-          pwd
-          ls
-          ls .
-          ls ./.github
-          ls ./.github/workflows
-          python3 ./.github/workflows/check_image_versions.py base/platform/Chart.yaml pr/platform/Chart.yaml
+          python3 pr/.github/workflows/check_image_versions.py base/platform/Chart.yaml pr/platform/Chart.yaml

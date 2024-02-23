@@ -51,7 +51,7 @@ classifier:
   ha:
     replicas: 8
   classifier_v3:
-    imageTag: 2.6.11
+    imageTag: 2.5.11
   teamOwner: ds
   teamLead: vconstantgetvisibility
   gitRepository: ds-ml2
