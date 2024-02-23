@@ -59,7 +59,7 @@ connectorGoogle:
   products:
     - focus
     - enterprise
-  imageTag: 2.4.0
+  imageTag: 2.3.0
   replicas: 1
   teamOwner: envision
   teamLead: azzRadhia
