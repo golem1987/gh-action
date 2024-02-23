@@ -35,4 +35,4 @@ jobs:
         run: pip install pyyaml
 
       - name: Compare image tags inside of values.yaml
-        run: python3 check_image_versions.py base/platform/Chart.yaml pr/platform/Chart.yaml
+        run: python3 ./.github/workflows/check_image_versions.py base/platform/Chart.yaml pr/platform/Chart.yaml
