@@ -15,9 +15,10 @@ jobs:
     name: check_image_versions
     runs-on: ubuntu-20.04
     outputs:
-      messages: ${{ steps.checking_images.outputs.msg }}
       del_service: ${{ steps.checking_images.outputs.del_service }}
       dec_version: ${{ steps.checking_images.outputs.dec_version }}
+      dec_ver_msg: ${{ steps.checking_images.outputs.dec_ver_msg }}
+      del_ver_msg: ${{ steps.checking_images.outputs.del_ver_msg }}
     steps:
       - name: Checkout Base branch
         uses: actions/checkout@v3
@@ -51,7 +52,8 @@ jobs:
 
       - name: Print messages from script
         run: |
-          echo "${{ steps.checking_images.outputs.messages }}"
+          echo "${{ steps.checking_images.outputs.dec_ver_msg }}"
+          echo "${{ steps.checking_images.outputs.del_ver_msg }}"
           echo "DEL_SERVICE=${{ steps.checking_images.outputs.del_service }}" >> $GITHUB_ENV
           echo "DEC_VERSION=${{ steps.checking_images.outputs.dec_version }}" >> $GITHUB_ENV
 
@@ -67,11 +69,16 @@ jobs:
         with:
           labels: DecreasedServiceVersion
 
-      - name: test
+      - name: Conditional stop and message
         run: |
-          echo $DEC_VERSION
-          echo ${{ env.DEC_VERSION }}
-
-      - name: Conditional stop
-        if: ${{ env.DEL_SERVICE == '1' || env.DEC_VERSION == '1' }}
-        run: exit 1   
+          if [ "${{ env.DEL_SERVICE }}" == "1" ]; then
+            echo "${{ steps.checking_images.outputs.del_ver_msg }}"
+          fi
+          if [ "${{ env.DEC_VERSION }}" == "1" ]; then
+            echo "${{ steps.checking_images.outputs.dec_ver_msg }}"
+          fi
+          if [ "${{ env.DEL_SERVICE }}" == "1" ] || [ "${{ env.DEC_VERSION }}" == "1" ]; then
+            echo "Workflow fail as there is deleted services or decreased version for image tag"
+            exit 1
+          fi
+        shell: bash

@@ -3,6 +3,8 @@ import sys
 
 deleted_services = []
 services_with_decreased_version=[]
+deleted = []
+decreased = []
 del_service = 0
 dec_version = 0
 
@@ -35,21 +37,12 @@ def print_services_info_and_exit():
     exit_code = 0 
     if deleted_services:
         deleted_services_str = ', '.join(deleted_services)
-        messages.append(f"Deleted Services: {deleted_services_str}")
+        deleted.append(f"Deleted Services: {deleted_services_str}")
     if services_with_decreased_version:
         services_with_decreased_version_str = ', '.join(services_with_decreased_version)
-        messages.append(f"Services with decreased version: {services_with_decreased_version_str}")
-    if messages:
-        messages = ', '.join(messages)
-        print(f"::set-output name=msg::{messages}")
-#    if deleted_services or services_with_decreased_version:
-#        exit_code = 0
-#    sys.exit(exit_code)
+        decreased.append(f"Services with decreased version: {services_with_decreased_version_str}")
 
 if __name__ == '__main__':
-#    main_chart_path = sys.argv[1]
-#    pr_chart_path = sys.argv[2]
-    messages = []
 
     main_values = parse_yaml("/tmp/basevalues.yaml")
     pr_values = parse_yaml("/tmp/prvalues.yaml")
@@ -67,5 +60,9 @@ if __name__ == '__main__':
     if services_with_decreased_version:
         dec_version = 1
 
+    deleted_str=', '.join(deleted)
+    decreased_str=', '.join(decreased)
     print(f"::set-output name=del_service::{del_service}")
     print(f"::set-output name=dec_version::{dec_version}")
+    print(f"::set-output name=del_ver_msg::{deleted_str}")
+    print(f"::set-output name=dec_ver_msg::{decreased_str}")

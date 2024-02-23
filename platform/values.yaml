@@ -55,15 +55,6 @@ classifier:
   teamOwner: ds
   teamLead: vconstantgetvisibility
   gitRepository: ds-ml2
-connectorGoogle:
-  products:
-    - focus
-    - enterprise
-  imageTag: 2.3.0
-  replicas: 1
-  teamOwner: envision
-  teamLead: azzRadhia
-  gitRepository: connector-google
 connectorOnedrive:
   products:
     - focus
@@ -462,7 +453,7 @@ regexService:
 scanManager:
   products:
     - enterprise
-  imageTag: 5.17.3
+  imageTag: 5.12.3
   replicas: 1
   teamOwner: quest
   teamLead: pkonstanczuk
