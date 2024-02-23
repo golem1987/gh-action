@@ -58,16 +58,16 @@ jobs:
 
       - name: Deleted Services Labels
         uses: actions-ecosystem/action-add-labels@v1
-        if: env.DEL_SERVICE == 1
+        if: env.DEL_SERVICE == '1'
         with:
           labels: DeletedService
 
       - name: Decreased Service
         uses: actions-ecosystem/action-add-labels@v1
-        if: env.DEC_VERSION == 0
+        if: env.DEC_VERSION == '0'
         with:
           labels: DecreasedServiceVersion
 
       - name: Conditional stop
-        if: env.DEL_SERVICE == 1 or env.DEC_VERSION == 1
-        run: exit 1      
+        if: ${{ env.DEL_SERVICE == '1' || env.DEC_VERSION == '1' }}
+        run: exit 1   
