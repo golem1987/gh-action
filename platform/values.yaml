@@ -461,7 +461,6 @@ regexService:
   gitRepository: regex-service
 scanManager:
   products:
-    - focus
     - enterprise
   imageTag: 5.17.3
   replicas: 1
