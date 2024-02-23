@@ -1,7 +1,6 @@
 name: Increase Version
 on:
   workflow_dispatch:
-on:
   push:
     branches:
       - main
