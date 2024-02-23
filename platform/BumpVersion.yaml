@@ -1,13 +1,15 @@
-name: Frula12
-on: 
+name: Increase Version
+on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
-    
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,14 +17,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      
+
       - name: Check modified files
         id: check-modified-files
         uses: tj-actions/changed-files@v23.1
         with:
           files: |
             /platform/*
-            /.github/*
           files_ignore: |
             /platform/fleet.yaml
             /platform/Chart.yaml
@@ -34,27 +35,31 @@ jobs:
           echo "PR_VERSION=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV
           echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')" >> $GITHUB_ENV
           chmod +x ./.github/increase_version.sh
-          ./.github/increase_version.sh $REMOTE_VERSION $PR_VERSION
+          ./.github/increase_version.sh $VERSION_DEVELOP $VERSION_CURRENT
+
+      - name: Bump a Helm Chart Version Locally
+        uses: explorium-ai/bump-helm-chart-action@main
+        with:
+          chart-path: platform
+          app_version: false
+          level: patch
+
 
       - name: Major Version
         uses: actions-ecosystem/action-add-labels@v1
         if: env.VER_RELEASE == 'major'
         with:
           labels: majorVersion
-  
+
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
         if: env.VER_RELEASE == 'minor'
         with:
           labels: minorVersion
-  
+
       - name: Update Chart.yaml with the new version
         run: |
           sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
-          git config --global user.email "git@gv.com"
-          git config --global user.name "GIT"          
-          git commit -am Update Chart.yaml version to $NEWVERSION
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
- 
+      - name: TEST
+        run: |
+          cat ./Chart.yaml
