@@ -15,7 +15,7 @@ jobs:
     name: check_image_versions
     runs-on: ubuntu-20.04
     outputs:
-      messages: ${{ steps.script.check_images.messages }}
+      messages: ${{ steps.script.checking_images.messages }}
     steps:
       - name: Checkout Base branch
         uses: actions/checkout@v3
