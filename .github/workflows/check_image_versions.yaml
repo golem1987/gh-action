@@ -52,8 +52,8 @@ jobs:
 
       - name: Print messages from script
         run: |
-          echo "${{ steps.checking_images.outputs.dec_svc_list }}"
-          echo "${{ steps.checking_images.outputs.del_svc_list }}"
+          echo "DEC_LIST=${{ steps.checking_images.outputs.dec_svc_list }}"
+          echo "DEL_LIST=${{ steps.checking_images.outputs.del_svc_list }}"
           echo "DEL_SERVICE=${{ steps.checking_images.outputs.del_service }}" >> $GITHUB_ENV
           echo "DEC_VERSION=${{ steps.checking_images.outputs.dec_version }}" >> $GITHUB_ENV
 
@@ -69,11 +69,8 @@ jobs:
         with:
           labels: DecreasedServiceVersion
 
-      - name: test
-        run: |
-          echo $DEC_VERSION
-          echo ${{ env.DEC_VERSION }}
-
       - name: Conditional stop
         if: ${{ env.DEL_SERVICE == '1' || env.DEC_VERSION == '1' }}
-        run: exit 1   
+        run:
+          echo "" 
+          exit 1   
