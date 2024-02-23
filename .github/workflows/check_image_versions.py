@@ -3,6 +3,9 @@ import sys
 
 deleted_services = []
 services_with_decreased_version=[]
+messages = []
+del_service = 0
+dec_version = 0
 
 def parse_yaml(file_path):
     with open(file_path, 'r') as file:
@@ -38,17 +41,17 @@ def print_services_info_and_exit():
         services_with_decreased_version_str = ', '.join(services_with_decreased_version)
         messages.append(f"Services with decreased version: {services_with_decreased_version_str}")
     for message in messages:
-        print(f"::set-output name=message::{message}")
-    if deleted_services or services_with_decreased_version:
-        exit_code = 1 
-    sys.exit(exit_code)
+        print(f"::set-output name=messages::{message}")
+#    if deleted_services or services_with_decreased_version:
+#        exit_code = 0
+#    sys.exit(exit_code)
 
 if __name__ == '__main__':
-    main_chart_path = sys.argv[1]
-    pr_chart_path = sys.argv[2]
+#    main_chart_path = sys.argv[1]
+#    pr_chart_path = sys.argv[2]
 
-    main_values = parse_yaml(main_chart_path)
-    pr_values = parse_yaml(pr_chart_path)
+    main_values = parse_yaml("/tmp/basevalues.yaml")
+    pr_values = parse_yaml("/tmp/prvalues.yaml")
 
     pr_dict=new_dict(pr_values)
     master_dict=new_dict(main_values)
@@ -57,3 +60,11 @@ if __name__ == '__main__':
     check_for_deleted_services(master_dict, pr_dict)
 
     print_services_info_and_exit()
+
+    if deleted_services:
+        del_service = 1
+    if services_with_decreased_version:
+        dec_version = 1
+    print(f"::set-output name=msg::{messages}")
+    print(f"::set-output name=del_service::{del_service}")
+    print(f"::set-output name=dec_version::{dec_version}")

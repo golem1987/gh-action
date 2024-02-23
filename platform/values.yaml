@@ -51,7 +51,7 @@ classifier:
   ha:
     replicas: 8
   classifier_v3:
-    imageTag: 2.6.11
+    imageTag: 2.5.11
   teamOwner: ds
   teamLead: vconstantgetvisibility
   gitRepository: ds-ml2
@@ -59,7 +59,7 @@ connectorGoogle:
   products:
     - focus
     - enterprise
-  imageTag: 2.8.0
+  imageTag: 2.4.0
   replicas: 1
   teamOwner: envision
   teamLead: azzRadhia
@@ -385,18 +385,6 @@ flink:
   teamOwner: platform
   teamLead: ilvar
   gitRepository: flink
-agentEdge:
-  products:
-    - synergy
-    - focus
-    - enterprise
-  imageTag: 2.8.27
-  replicas: 1
-  ha:
-    replicas: 4
-  teamOwner: pkonstanczuk
-  teamLead: quest
-  gitRepository: agent-edge
 agentSwarm:
   products:
     - synergy
@@ -466,7 +454,7 @@ regexService:
     - synergy
     - focus
     - enterprise
-  imageTag: 2.11.2
+  imageTag: 2.10.2
   replicas: 1
   teamOwner: quest
   teamLead: pkonstanczuk
@@ -498,12 +486,3 @@ trusteesManager:
   teamOwner: quest
   teamLead: pkonstanczuk
   gitRepository: trustees-management
-webhookManager:
-  products:
-    - focus
-    - enterprise
-  imageTag: 2.7.9
-  replicas: 1
-  teamOwner: quest
-  teamLead: pkonstanczuk
-  gitRepository: webhook-manager
