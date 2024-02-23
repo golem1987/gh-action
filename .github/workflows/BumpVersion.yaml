@@ -51,7 +51,7 @@ jobs:
 
       - name: Bump a Helm Chart Version Locally
         uses: explorium-ai/bump-helm-chart-action@main
-        id: bump_patch
+        id: bump_minor
         if: startsWith(env.BRANCH_NAME, 'minorVersion')
         with:
           chart-path: /tmp
@@ -60,7 +60,7 @@ jobs:
 
       - name: Bump a Helm Chart Version Locally
         uses: explorium-ai/bump-helm-chart-action@main
-        id: bump_patch
+        id: bump_major
         if: startsWith(env.BRANCH_NAME, 'majorVersion')
         with:
           chart-path: /tmp
