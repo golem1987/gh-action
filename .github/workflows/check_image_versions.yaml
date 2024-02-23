@@ -47,13 +47,13 @@ jobs:
         id: checking_images
         run: |
           python3 pr/.github/workflows/check_image_versions.py
-          echo "${{ steps.checking_images.outputs.messages }}"
+
 
       - name: Print messages from script
         run: |
           echo "${{ steps.checking_images.outputs.messages }}"
-          echo "DEL_SERVICE=${{ steps.checking_images.outputs.del_service }}" >> GITHUB_ENV
-          echo "DEC_VERSION=${{ steps.checking_images.outputs.dec_version }}" >> GITHUB_ENV
+          echo "DEL_SERVICE=${{ steps.checking_images.outputs.del_service }}" >> $GITHUB_ENV
+          echo "DEC_VERSION=${{ steps.checking_images.outputs.dec_version }}" >> $GITHUB_ENV
 
       - name: Deleted Services Labels
         uses: actions-ecosystem/action-add-labels@v1
@@ -63,9 +63,14 @@ jobs:
 
       - name: Decreased Service
         uses: actions-ecosystem/action-add-labels@v1
-        if: env.DEC_VERSION == '0'
+        if: env.DEC_VERSION == '1'
         with:
           labels: DecreasedServiceVersion
+
+      - name: test
+        run: |
+          echo $DEC_VERSION
+          echo ${{ env.DEC_VERSION }}
 
       - name: Conditional stop
         if: ${{ env.DEL_SERVICE == '1' || env.DEC_VERSION == '1' }}

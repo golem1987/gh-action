@@ -59,7 +59,7 @@ connectorGoogle:
   products:
     - focus
     - enterprise
-  imageTag: 2.4.0
+  imageTag: 2.3.0
   replicas: 1
   teamOwner: envision
   teamLead: azzRadhia
@@ -454,14 +454,13 @@ regexService:
     - synergy
     - focus
     - enterprise
-  imageTag: 2.10.2
+  imageTag: 2.9.2
   replicas: 1
   teamOwner: quest
   teamLead: pkonstanczuk
   gitRepository: regex-service
 scanManager:
   products:
-    - focus
     - enterprise
   imageTag: 5.17.3
   replicas: 1
