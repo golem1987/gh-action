@@ -63,9 +63,14 @@ jobs:
 
       - name: Decreased Service
         uses: actions-ecosystem/action-add-labels@v1
-        if: env.DEC_VERSION == '0'
+        if: env.DEC_VERSION == '1'
         with:
           labels: DecreasedServiceVersion
+
+      - name: test
+        run: |
+          echo $DEC_VERSION
+          echo ${{ env.DEC_VERSION }}
 
       - name: Conditional stop
         if: ${{ env.DEL_SERVICE == '1' || env.DEC_VERSION == '1' }}
