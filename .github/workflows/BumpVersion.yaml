@@ -62,11 +62,11 @@ jobs:
         uses: explorium-ai/bump-helm-chart-action@main
         id: bump_major
         if: startsWith(env.BRANCH_NAME, 'majorVersion')
-        run: echo "LEVEL=major" >> £GITHUB_ENV
         with:
           chart-path: /tmp
           app_version: false
           level: major
 
-      - name: tess
-        run: echo $LEVEL
+      - name: Test
+        shell: bash
+        run: echo "VV=${{ steps.bump_major.outputs.chart }}" 
