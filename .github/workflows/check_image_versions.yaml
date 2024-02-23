@@ -37,7 +37,7 @@ jobs:
       - name: Copy files to /tmp
         run: |
           cp base/platform/values.yaml /tmp/basevalues.yaml
-          cp pr/platform/values.yaml  /tmp.basevalues.yaml
+          cp pr/platform/values.yaml  /tmp/basevalues.yaml
 
       - name: Compare image tags inside of values.yaml
         run: |
