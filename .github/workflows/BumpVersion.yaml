@@ -41,7 +41,7 @@ jobs:
           fi
       
       - name: Bump a Helm Chart Version Locally
-        uses: explorium-ai/bump-helm-chart-action@main
+        uses: beehivewarrior/bump_helm@main
         id: bump_patch
         if: ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) }}
         with:
@@ -50,7 +50,7 @@ jobs:
           level: patch
 
       - name: Bump a Helm Chart Version Locally
-        uses: explorium-ai/bump-helm-chart-action@main
+        uses: beehivewarrior/bump_helm
         id: bump_minor
         if: startsWith(env.BRANCH_NAME, 'minorVersion')
         with:
@@ -59,14 +59,14 @@ jobs:
           level: minor
 
       - name: Bump a Helm Chart Version Locally
-        uses: explorium-ai/bump-helm-chart-action@main
+        uses: beehivewarrior/bump_helm
         id: bump_major
         if: startsWith(env.BRANCH_NAME, 'majorVersion')
         with:
-          chart-path: /tmp
+          chart_name: /tmp
           app_version: false
-          level: major
+          bump_strategy: major
 
       - name: Test
         shell: bash
-        run: echo "VV=${{ steps.bump_major.outputs.level }}" 
+        run: echo "VV=${{ steps.bump_major.outputs.version_bumped }}" 
