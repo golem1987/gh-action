@@ -30,7 +30,7 @@ jobs:
         if: steps.check-modified-files.outputs.any_modified == 'true'
         run: |
           git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
-          "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')"  >> $GITHUB_ENV
+          echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')"  >> $GITHUB_ENV
       - name: Extract branch name
         shell: bash
         run: |
