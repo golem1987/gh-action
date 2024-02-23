@@ -35,6 +35,7 @@ MINOR_BRANCH=${MINOR}
 PATCH_BRANCH=${PATCH}
 BRANCH_VERSION="$MAJOR_BRANCH.$MINOR_BRANCH.$PATCH_BRANCH"
 
+
 if [[ "$MAJOR_DEVELOP" < "$MAJOR_BRANCH" || "$MINOR_DEVELOP" < "$MINOR_BRANCH" ]]; then
     echo "Major Version cannot be decreased"
     exit 1
@@ -42,9 +43,13 @@ elif [[ "$MAJOR_DEVELOP" == "$MAJOR_BRANCH" && "$MINOR_DEVELOP" == "$MINOR_BRANC
     PATCH_DEVELOP=$((PATCH_DEVELOP+1))
     NEW_VERSION="$MAJOR_DEVELOP.$MINOR_DEVELOP.$PATCH_DEVELOP"
     echo "::set-output name=stdout::New chart version $NEW_VERSION"
+    VERSION=patch
+elif [[ "$MAJOR_DEVELOP" == "$MAJOR_BRANCH" && "$MINOR_DEVELOP" < "$MINOR_BRANCH" ]]; then
+    NEW_VERSION="$MAJOR_DEVELOP.$MINOR_DEVELOP.$PATCH_DEVELOP"
+    echo "::set-output name=stdout::New chart version $NEW_VERSION"
     VERSION=minor
-else
-    NEW_VERSION=$BRANCH_VERSION
+elif [[ "$MAJOR_DEVELOP" < "$MAJOR_BRANCH" ]]; then
+    NEW_VERSION="$MAJOR_DEVELOP.$MINOR_DEVELOP.$PATCH_DEVELOP"
     echo "::set-output name=stdout::New chart version $NEW_VERSION"
     VERSION=major
 fi

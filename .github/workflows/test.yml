@@ -42,13 +42,19 @@ jobs:
         uses: actions-ecosystem/action-add-labels@v1
         if: env.VER_RELEASE == 'major'
         with:
-          labels: majorVersion
+          labels: Major
   
       - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
         if: env.VER_RELEASE == 'minor'
         with:
-          labels: minorVersion
+          labels: Minor
+
+      - name: Patch Version
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.VER_RELEASE == 'patch'
+        with:
+          labels: Patch
   
       - name: Update Chart.yaml with the new version
         run: |

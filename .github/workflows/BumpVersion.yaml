@@ -34,18 +34,15 @@ jobs:
         run: |
           echo "PR_VERSION=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV
           echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')" >> $GITHUB_ENV
-          chmod +x ./.github/increase_version.sh
-          ./.github/increase_version.sh $VERSION_DEVELOP $VERSION_CURRENT
 
       - name: Bump a Helm Chart Version Locally
         uses: explorium-ai/bump-helm-chart-action@main
         with:
-          chart-path: platform
+          chart-path: /tmp
           app_version: false
           level: patch
 
-
-      - name: Major Version
+      - name: Minor Version
         uses: actions-ecosystem/action-add-labels@v1
         if: env.VER_RELEASE == 'major'
         with:
@@ -60,6 +57,3 @@ jobs:
       - name: Update Chart.yaml with the new version
         run: |
           sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
-      - name: TEST
-        run: |
-          cat ./Chart.yaml
