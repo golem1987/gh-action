@@ -26,13 +26,15 @@ jobs:
           files_ignore: |
             /platform/fleet.yaml
             /platform/Chart.yaml
+      - name: Getting Versions
+        run: |
+          echo "PR_VERSION=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV
+          echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')" >> $GITHUB_ENV
 
       - name: Compare Chart versions
         if: steps.check-modified-files.outputs.any_modified == 'true'
         id: compare_chart_version
         run: |
-          echo "PR_VERSION=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV
-          echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')" >> $GITHUB_ENV
           chmod +x ./.github/increase_version.sh
           ./.github/increase_version.sh $REMOTE_VERSION $PR_VERSION
 
