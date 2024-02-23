@@ -15,9 +15,10 @@ jobs:
     name: check_image_versions
     runs-on: ubuntu-20.04
     outputs:
-      messages: ${{ steps.checking_images.outputs.msg }}
       del_service: ${{ steps.checking_images.outputs.del_service }}
       dec_version: ${{ steps.checking_images.outputs.dec_version }}
+      dec_svc_list: ${{ steps.checking_images.outputs.dec_ver_msg }}
+      del_svc_list: ${{ steps.checking_images.outputs.del_ver_msg }}
     steps:
       - name: Checkout Base branch
         uses: actions/checkout@v3
@@ -51,7 +52,8 @@ jobs:
 
       - name: Print messages from script
         run: |
-          echo "${{ steps.checking_images.outputs.messages }}"
+          echo "${{ steps.checking_images.outputs.dec_svc_list }}"
+          echo "${{ steps.checking_images.outputs.del_svc_list }}"
           echo "DEL_SERVICE=${{ steps.checking_images.outputs.del_service }}" >> $GITHUB_ENV
           echo "DEC_VERSION=${{ steps.checking_images.outputs.dec_version }}" >> $GITHUB_ENV
 
