@@ -35,7 +35,7 @@ jobs:
           pip install setuptools
 
       - name: Compare Chart versions
-        if: steps.check-modified-files.outputs.any_modified == 'fale'
+        if: steps.check-modified-files.outputs.any_modified == 'false'
         run: |
           echo "No changes detected"
           exit 1
