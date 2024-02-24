@@ -30,30 +30,42 @@ jobs:
         if: steps.check-modified-files.outputs.any_modified == 'true'
         run: |
           git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
-      
+          echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')"  >> $GITHUB_ENV
       - name: Extract branch name
         shell: bash
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+        run: |
+          if [[ $GITHUB_REF == refs/pull/* ]]; then
+            echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+          else
+            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          fi
       
       - name: Bump a Helm Chart Version Locally
-        uses: explorium-ai/bump-helm-chart-action@main
+        uses: beehivewarrior/bump_helm@main
+        id: bump_patch
+        if: ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) }}
         with:
           chart-path: /tmp
           app_version: false
           level: patch
 
       - name: Bump a Helm Chart Version Locally
-        uses: explorium-ai/bump-helm-chart-action@main
+        uses: beehivewarrior/bump_helm@main
+        id: bump_minor
         if: startsWith(env.BRANCH_NAME, 'minorVersion')
         with:
-          chart-path: /tmp
+          source: /tmp
           app_version: false
           level: minor
 
       - name: Bump a Helm Chart Version Locally
-        uses: explorium-ai/bump-helm-chart-action@main
+        uses: TomerFi/version-bumper-action@master
+        id: bump_major
         if: startsWith(env.BRANCH_NAME, 'majorVersion')
         with:
-          chart-path: /tmp
-          app_version: false
-          level: major
+          source: $REMOTE_VERSION
+          bump: major
+
+      - name: Test
+        shell: bash
+        run: echo "VV=${{ steps.bump_major.outputs.bump }}" 
