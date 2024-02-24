@@ -1,9 +1,10 @@
 name: Increase Version
 on: 
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - main
+      - develop
 
 jobs:
   deploy:
@@ -22,6 +23,12 @@ jobs:
           files_ignore: |
             /platform/fleet.yaml
             /platform/Chart.yaml
+      
+      - name: Compare Chart versions
+        if: steps.check-modified-files.outputs.any_modified == 'false'
+        run: |
+          echo "No changes detected"
+          exit 1
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -32,11 +39,6 @@ jobs:
         run: |
           pip install pybump
           pip install setuptools
-
-      - name: Compare Chart versions
-        if: steps.check-modified-files.outputs.any_modified == 'true'
-        run: |
-          git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
           
       - name: Extract branch name
         shell: bash
@@ -46,6 +48,7 @@ jobs:
           else
             echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
           fi
+          git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
       
       - name: Bump a Helm Chart Version Locally for Patch
         if: ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) }}
@@ -54,7 +57,11 @@ jobs:
           echo "LEVEL=Patch" >> $GITHUB_ENV
           echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
       
-     
+      - name: Version
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.LEVEL == 'Patch'
+        with:
+          labels: ${{ env.LEVEL }}        
 
       - name: Update Chart.yaml with the new version
         run: |
