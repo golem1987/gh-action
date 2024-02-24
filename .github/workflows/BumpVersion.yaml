@@ -34,18 +34,26 @@ jobs:
           fi
           git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
       
-      - name: Bump a Helm Chart Version Locally for Patch
+      - name: Bump a Patch for Helm Chart Version Locally
         if: ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) }}
         run: |
           pybump bump --file /tmp/Chart.yaml --level patch
           echo "LEVEL=Patch" >> $GITHUB_ENV
           echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
-      
-      - name: Version
-        uses: actions-ecosystem/action-add-labels@v1
-        if: env.LEVEL == 'Patch'
-        with:
-          labels: ${{ env.LEVEL }}        
+           
+      - name: Bump a Minor for Helm Chart Version Locally
+        if: startsWith(env.BRANCH_NAME, 'minorVersion')
+        run: |
+          pybump bump --file /tmp/Chart.yaml --level minor
+          echo "LEVEL=Minor" >> $GITHUB_ENV
+          echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
+
+      - name: Bump a Major for Helm Chart Version Locally
+        if: ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) }}
+        run: |
+          pybump bump --file /tmp/Chart.yaml --level major
+          echo "LEVEL=Major" >> $GITHUB_ENV
+          echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
 
       - name: Update Chart.yaml with the new version
         run: |
