@@ -26,6 +26,14 @@ jobs:
             /platform/fleet.yaml
             /platform/Chart.yaml
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install PyYAML
+        run: pip install pybump
+
       - name: Compare Chart versions
         if: steps.check-modified-files.outputs.any_modified == 'true'
         run: |
@@ -40,32 +48,15 @@ jobs:
             echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
           fi
       
-      - name: Bump a Helm Chart Version Locally
-        uses: beehivewarrior/bump_helm@main
-        id: bump_patch
+      - name: Bump a Helm Chart Version Locally for Patch
         if: ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) }}
-        with:
-          chart-path: /tmp
-          app_version: false
-          level: patch
+        run: |
+          pybump bump --file /tmp/Chart.yaml --level patch 
+          echo "LEVEL=patch" >> $GITHUB_ENV
+        
+      - name: TEST
+        run:
+          echo $LEVEL
+          echo /tmp/Chart.yaml
+        
 
-      - name: Bump a Helm Chart Version Locally
-        uses: beehivewarrior/bump_helm@main
-        id: bump_minor
-        if: startsWith(env.BRANCH_NAME, 'minorVersion')
-        with:
-          source: /tmp
-          app_version: false
-          level: minor
-
-      - name: Bump a Helm Chart Version Locally
-        uses: TomerFi/version-bumper-action@master
-        id: bump_major
-        if: startsWith(env.BRANCH_NAME, 'majorVersion')
-        with:
-          source: $REMOTE_VERSION
-          bump: major
-
-      - name: Test
-        shell: bash
-        run: echo "VV=${{ steps.bump_major.outputs.bump }}" 
