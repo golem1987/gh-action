@@ -40,7 +40,7 @@ jobs:
         if: steps.check-modified-files.outputs.any_modified == 'true'
         run: |
           git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
-          echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')"  >> $GITHUB_ENV
+          
       - name: Extract branch name
         shell: bash
         run: |
@@ -53,12 +53,30 @@ jobs:
       - name: Bump a Helm Chart Version Locally for Patch
         if: ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) }}
         run: |
-          pybump bump --file /tmp/Chart.yaml --level patch 
-          echo "LEVEL=patch" >> $GITHUB_ENV
-        
-      - name: TEST
-        run:
-          echo $LEVEL
-          echo /tmp/Chart.yaml
+          pybump bump --file /tmp/Chart.yaml --level patch
+          echo "LEVEL=Patch" >> $GITHUB_ENV
+          echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
+      
+      - name: Version
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.LEVEL == 'Patch'
+        with:
+          labels: ${{ env.LEVEL }}        
+
+      - name: Update Chart.yaml with the new version
+        run: |
+          sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
+          git config --global user.email "git@gv.com"
+          git config --global user.name "GIT"
+          git add ./Chart.yaml
+          git commit -m "Update Chart.yaml version to $NEWVERSION"
+          git push origin HEAD:${{ github.head_ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+   
+
+          echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')"  >> $GITHUB_ENV
+
+
         
 
