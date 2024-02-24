@@ -11,7 +11,8 @@ kafka:
 elasticsearch:
   host: gv-es-http9
   port: 9200
-  credsSecretName: gv-es-elastic-user
+  credsSecretName: gv-es-elas
+  tic-user
   labels:
     app.kubernetes.io/name: elasticsearch
 postgres:

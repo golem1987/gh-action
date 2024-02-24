@@ -23,6 +23,12 @@ jobs:
           files_ignore: |
             /platform/fleet.yaml
             /platform/Chart.yaml
+      
+      - name: Compare Chart versions
+        if: steps.check-modified-files.outputs.any_modified == 'false'
+        run: |
+          echo "No changes detected"
+          exit 1
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -33,12 +39,6 @@ jobs:
         run: |
           pip install pybump
           pip install setuptools
-
-      - name: Compare Chart versions
-        if: steps.check-modified-files.outputs.any_modified == 'false'
-        run: |
-          echo "No changes detected"
-          exit 1
           
       - name: Extract branch name
         shell: bash
