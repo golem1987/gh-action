@@ -5,6 +5,11 @@ on:
     branches:
       - main
       - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+    
 
 jobs:
   deploy:
@@ -55,13 +60,20 @@ jobs:
           echo "LEVEL=Major" >> $GITHUB_ENV
           echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
 
+      - name: Assign Label
+        uses: actions-ecosystem/action-add-labels@v1
+        if: github.event_name == 'pull_request'
+        with:
+          labels: ${{ env.LEVEL }}
+
       - name: Update Chart.yaml with the new version
+        if: github.event_name == 'push'  
         run: |
           sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
           git config --global user.email "git@gv.com"
           git config --global user.name "GIT"
           git add ./Chart.yaml
           git commit -m "Update Chart.yaml version to $NEWVERSION"
-          git push origin HEAD:${{ github.head_ref }}
+          git push origin HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
