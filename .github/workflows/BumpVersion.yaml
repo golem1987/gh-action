@@ -49,7 +49,7 @@ jobs:
           echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
 
       - name: Bump a Major for Helm Chart Version Locally
-        if: ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) }}
+        if: startsWith(env.BRANCH_NAME, 'majorVersion')
         run: |
           pybump bump --file /tmp/Chart.yaml --level major
           echo "LEVEL=Major" >> $GITHUB_ENV
