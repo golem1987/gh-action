@@ -1,6 +1,6 @@
 high_available: false
 consul:
-  host: gv-essentials-consul-server
+  host: gv-essentifals-consul-server
   port: 8500
 rbacConfiguration:
   clustersEnabled: rocketdev,enterpriseqa,questdev
