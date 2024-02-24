@@ -73,10 +73,3 @@ jobs:
           git push origin HEAD:${{ github.head_ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-   
-
-          echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')"  >> $GITHUB_ENV
-
-
-        
-
