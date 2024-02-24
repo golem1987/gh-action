@@ -14,22 +14,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check modified files
-        id: check-modified-files
-        uses: tj-actions/changed-files@v23.1
-        with:
-          files: |
-            /platform/*
-          files_ignore: |
-            /platform/fleet.yaml
-            /platform/Chart.yaml
-      
-      - name: Compare Chart versions
-        if: steps.check-modified-files.outputs.any_modified == 'false'
-        run: |
-          echo "No changes detected"
-          exit 1
-
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
