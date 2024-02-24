@@ -32,7 +32,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install PyYAML
-        run: pip install pybump
+        run: pip3 install pybump
 
       - name: Compare Chart versions
         if: steps.check-modified-files.outputs.any_modified == 'true'
