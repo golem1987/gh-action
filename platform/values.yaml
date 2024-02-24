@@ -9,7 +9,7 @@ kafka:
   certSecretName: gv-kafka-cluster-cluster-ca-cert
   broker: gv-kafka-cluster-kafka-brokers
 elasticsearch:
-  host: gv-es-http
+  host: gv-es-http9
   port: 9200
   credsSecretName: gv-es-elastic-user
   labels:
