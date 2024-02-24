@@ -54,11 +54,7 @@ jobs:
           echo "LEVEL=Patch" >> $GITHUB_ENV
           echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
       
-      - name: Version
-        uses: actions-ecosystem/action-add-labels@v1
-        if: env.LEVEL == 'Patch'
-        with:
-          labels: ${{ env.LEVEL }}        
+     
 
       - name: Update Chart.yaml with the new version
         run: |
