@@ -1,9 +1,6 @@
 name: Increase Version
 on: 
   workflow_dispatch:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
@@ -26,11 +23,21 @@ jobs:
             /platform/fleet.yaml
             /platform/Chart.yaml
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install PyYAML
+        run: |
+          pip install pybump
+          pip install setuptools
+
       - name: Compare Chart versions
         if: steps.check-modified-files.outputs.any_modified == 'true'
         run: |
           git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
-          echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')"  >> $GITHUB_ENV
+          
       - name: Extract branch name
         shell: bash
         run: |
@@ -40,32 +47,26 @@ jobs:
             echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
           fi
       
-      - name: Bump a Helm Chart Version Locally
-        uses: beehivewarrior/bump_helm@main
-        id: bump_patch
+      - name: Bump a Helm Chart Version Locally for Patch
         if: ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) }}
+        run: |
+          pybump bump --file /tmp/Chart.yaml --level patch
+          echo "LEVEL=Patch" >> $GITHUB_ENV
+          echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
+      
+      - name: Version
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.LEVEL == 'Patch'
         with:
-          chart-path: /tmp
-          app_version: false
-          level: patch
+          labels: ${{ env.LEVEL }}        
 
-      - name: Bump a Helm Chart Version Locally
-        uses: beehivewarrior/bump_helm@main
-        id: bump_minor
-        if: startsWith(env.BRANCH_NAME, 'minorVersion')
-        with:
-          source: /tmp
-          app_version: false
-          level: minor
-
-      - name: Bump a Helm Chart Version Locally
-        uses: TomerFi/version-bumper-action@master
-        id: bump_major
-        if: startsWith(env.BRANCH_NAME, 'majorVersion')
-        with:
-          source: $REMOTE_VERSION
-          bump: major
-
-      - name: Test
-        shell: bash
-        run: echo "VV=${{ steps.bump_major.outputs.bump }}" 
+      - name: Update Chart.yaml with the new version
+        run: |
+          sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
+          git config --global user.email "git@gv.com"
+          git config --global user.name "GIT"
+          git add ./Chart.yaml
+          git commit -m "Update Chart.yaml version to $NEWVERSION"
+          git push origin HEAD:${{ github.head_ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
