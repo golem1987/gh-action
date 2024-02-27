@@ -26,18 +26,20 @@ jobs:
           pip install pybump
           pip install setuptools
           
-      - name: Extract branch name and Chart.yaml from develop branch
+      - name: Extract Chart.yaml from develop branch
         shell: bash
         run: |
-          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
           git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
       
       - name: Bump a Patch for Helm Chart Version
         if: >-
-          ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) ||
           contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Major-Version') &&
-          !contains(github.event.pull_request.labels.*.name, 'Minor-Version') }}
+          !contains(github.event.pull_request.labels.*.name, 'Minor-Version') ||
+          (!startsWith(github.event.pull_request.head.ref, 'majorVersion') &&
+          !startsWith(github.event.pull_request.head.ref, 'minorVersion') &&
+          (!contains(github.event.pull_request.labels.*.name, 'Major-Version') &&
+          !contains(github.event.pull_request.labels.*.name, 'Minor-Version')))
         run: |
           pybump bump --file /tmp/Chart.yaml --level patch
           echo "LEVEL=Patch" >> $GITHUB_ENV
@@ -45,10 +47,12 @@ jobs:
            
       - name: Bump a Minor for Helm Chart Version
         if: >-
-          (startsWith(env.BRANCH_NAME, 'minorVersion') || 
           contains(github.event.pull_request.labels.*.name, 'Minor-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
-          !contains(github.event.pull_request.labels.*.name, 'Major-Version'))
+          !contains(github.event.pull_request.labels.*.name, 'Major-Version') ||
+          (startsWith(github.event.pull_request.head.ref, 'minorVersion') &&
+          !contains(github.event.pull_request.labels.*.name, 'Major-Version') &&
+          !contains(github.event.pull_request.labels.*.name, 'Patch-Version'))
         run: |
           pybump bump --file /tmp/Chart.yaml --level minor
           echo "LEVEL=Minor" >> $GITHUB_ENV
@@ -56,10 +60,12 @@ jobs:
 
       - name: Bump a Major for Helm Chart Version
         if: >-
-          (startsWith(env.BRANCH_NAME, 'majorVersion') || 
           contains(github.event.pull_request.labels.*.name, 'Major-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
-          !contains(github.event.pull_request.labels.*.name, 'Minor-Version'))
+          !contains(github.event.pull_request.labels.*.name, 'Minor-Version') ||
+          (startsWith(github.event.pull_request.head.ref, 'majorVersion') &&
+          !contains(github.event.pull_request.labels.*.name, 'Minor-Version') &&
+          !contains(github.event.pull_request.labels.*.name, 'Patch-Version'))
         run: |
           pybump bump --file /tmp/Chart.yaml --level major
           echo "LEVEL=Major" >> $GITHUB_ENV
