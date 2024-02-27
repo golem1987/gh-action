@@ -75,7 +75,7 @@ jobs:
           labels: ${{ env.LEVEL }}-Version
 
       - name: Update Chart.yaml with the new version
-        if: github.event_name == 'push'  
+        if: github.event.pull_request.merged == true  
         run: |
           sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
           git config --global user.email "git@gv.com"
