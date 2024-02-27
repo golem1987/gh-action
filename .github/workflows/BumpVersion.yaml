@@ -31,25 +31,35 @@ jobs:
           git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
       
       - name: Bump a Patch for Helm Chart Version
-        if: ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) }}
+        if: >-
+          ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) || 
+          contains(github.event.pull_request.labels.*.name, 'Patch-Version') }} &&
+          ${{ !contains(github.event.pull_request.labels.*.name, 'Major-Version') &&
+          !contains(github.event.pull_request.labels.*.name, 'Minor-Version') }}
         run: |
           pybump bump --file /tmp/Chart.yaml --level patch
           echo "LEVEL=Patch" >> $GITHUB_ENV
           echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)" >> $GITHUB_ENV
            
       - name: Bump a Minor for Helm Chart Version
-        if: startsWith(env.BRANCH_NAME, 'minorVersion')
+        if: >-
+          (startsWith(env.BRANCH_NAME, 'majorVersion') || contains(github.event.pull_request.labels.*.name, 'Major-Version')) && 
+          (!contains(github.event.pull_request.labels.*.name, 'Patch-Version') || 
+          !contains(github.event.pull_request.labels.*.name, 'Major-Version'))
         run: |
           pybump bump --file /tmp/Chart.yaml --level minor
           echo "LEVEL=Minor" >> $GITHUB_ENV
           echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
 
       - name: Bump a Major for Helm Chart Version
-        if: startsWith(env.BRANCH_NAME, 'majorVersion')
+        if: >-
+          (startsWith(env.BRANCH_NAME, 'majorVersion') || contains(github.event.pull_request.labels.*.name, 'Major-Version')) && 
+          (!contains(github.event.pull_request.labels.*.name, 'Patch-Version') || 
+          !contains(github.event.pull_request.labels.*.name, 'Minor-Version'))
         run: |
           pybump bump --file /tmp/Chart.yaml --level major
           echo "LEVEL=Major" >> $GITHUB_ENV
-          echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
+          echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)" >> $GITHUB_ENV
 
       - name: Assign Label
         uses: actions-ecosystem/action-add-labels@v1
