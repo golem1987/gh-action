@@ -1,10 +1,7 @@
 name: Increase Version
 on: 
   pull_request:
-    types: [opened, reopened, synchronize, labeled]
-    branches:
-      - develop
-  push:
+    types: [opened, reopened, synchronize, labeled, closed]
     branches:
       - develop
 
