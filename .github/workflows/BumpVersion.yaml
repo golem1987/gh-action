@@ -48,7 +48,7 @@ jobs:
           (startsWith(env.BRANCH_NAME, 'minorVersion') || 
           contains(github.event.pull_request.labels.*.name, 'Minor-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
-          !contains(github.event.pull_request.labels.*.name, 'Major-Version')
+          !contains(github.event.pull_request.labels.*.name, 'Major-Version'))
         run: |
           pybump bump --file /tmp/Chart.yaml --level minor
           echo "LEVEL=Minor" >> $GITHUB_ENV
@@ -59,7 +59,7 @@ jobs:
           (startsWith(env.BRANCH_NAME, 'majorVersion') || 
           contains(github.event.pull_request.labels.*.name, 'Major-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
-          !contains(github.event.pull_request.labels.*.name, 'Minor-Version')
+          !contains(github.event.pull_request.labels.*.name, 'Minor-Version'))
         run: |
           pybump bump --file /tmp/Chart.yaml --level major
           echo "LEVEL=Major" >> $GITHUB_ENV
