@@ -26,15 +26,14 @@ jobs:
           pip install pybump
           pip install setuptools
           
-      - name: Extract branch name and Chart.yaml from develop branch
+      - name: Extract Chart.yaml from develop branch
         shell: bash
         run: |
-          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
           git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
       
       - name: Bump a Patch for Helm Chart Version
         if: >-
-          ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) ||
+          ${{ !(startsWith(github.event.pull_request.head.ref, 'majorVersion') || startsWith(github.event.pull_request.head.ref, 'minorVersion')) ||
           contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Major-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Minor-Version') }}
@@ -45,7 +44,7 @@ jobs:
            
       - name: Bump a Minor for Helm Chart Version
         if: >-
-          (startsWith(env.BRANCH_NAME, 'minorVersion') || 
+          (startsWith(github.event.pull_request.head.ref, 'minorVersion') || 
           contains(github.event.pull_request.labels.*.name, 'Minor-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Major-Version'))
@@ -56,7 +55,7 @@ jobs:
 
       - name: Bump a Major for Helm Chart Version
         if: >-
-          (startsWith(env.BRANCH_NAME, 'majorVersion') || 
+          (startsWith(github.event.pull_request.head.ref, 'majorVersion') || 
           contains(github.event.pull_request.labels.*.name, 'Major-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
           !contains(github.event.pull_request.labels.*.name, 'Minor-Version'))
