@@ -20,14 +20,15 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install PyYAML
+      - name: Install pybump
         run: |
           pip install pybump
           pip install setuptools
           
-      - name: Extract branch name
+      - name: Extract branch name and develop Chart.yaml
         shell: bash
         run: |
+          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
           git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
       
       - name: Bump a Patch for Helm Chart Version
@@ -38,7 +39,10 @@ jobs:
           echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)" >> $GITHUB_ENV
            
       - name: Bump a Minor for Helm Chart Version
-        if: startsWith(env.BRANCH_NAME, 'minorVersion')
+        if: >-
+          (startsWith(env.BRANCH_NAME, 'majorVersion') || contains(github.event.pull_request.labels.*.name, 'Major-Version')) && 
+          (!contains(github.event.pull_request.labels.*.name, 'Patch-Version') || 
+          !contains(github.event.pull_request.labels.*.name, 'Major-Version'))
         run: |
           pybump bump --file /tmp/Chart.yaml --level minor
           echo "LEVEL=Minor" >> $GITHUB_ENV
