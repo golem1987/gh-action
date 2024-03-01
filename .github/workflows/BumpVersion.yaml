@@ -1,7 +1,7 @@
 name: Increase Version
 on: 
   pull_request:
-    types: [opened, reopened, synchronize, labeled, closed]
+    types: [opened, reopened, synchronize, labeled]
     branches:
       - develop
 
@@ -74,7 +74,6 @@ jobs:
           labels: ${{ env.LEVEL }}-Version
 
       - name: Update Chart.yaml with the new version
-        if: github.event.pull_request.merged == true  
         run: |
           sed -i "s/^version:.*/version: $NEWVERSION/" platform/Chart.yaml
           git config --global user.email "git@gv.com"
