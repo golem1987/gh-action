@@ -72,14 +72,14 @@ jobs:
           labels: ${{ env.LEVEL }}-Version
 
       - name: Update Chart.yaml with the new version
-        if: github.event_name == 'push'  
+        if: github.event_name == 'pull_request'  
         run: |
           sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
           git config --global user.email "git@gv.com"
           git config --global user.name "GIT"
           git add ./Chart.yaml
           git commit -m "Update Chart.yaml version to $NEWVERSION"
-          git push origin HEAD:develop
+          git push origin HEAD:${{ github.head_ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           
