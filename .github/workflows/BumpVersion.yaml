@@ -26,8 +26,7 @@ jobs:
       - name: Extract Chart.yaml from develop branch
         shell: bash
         run: |
-          git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
-      
+          git show origin/develop:platform/Chart.yaml > /tmp/Chart.yaml
       - name: Bump a Patch for Helm Chart Version
         if: >-
           contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
@@ -77,12 +76,11 @@ jobs:
       - name: Update Chart.yaml with the new version
         if: github.event.pull_request.merged == true  
         run: |
-          sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
+          sed -i "s/^version:.*/version: $NEWVERSION/" platform/Chart.yaml
           git config --global user.email "git@gv.com"
           git config --global user.name "GIT"
-          git add ./Chart.yaml
+          git add platform/Chart.yaml
           git commit -m "Update Chart.yaml version to $NEWVERSION"
-          git push origin HEAD:develop
+          git push origin HEAD:$GITHUB_REF
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          
