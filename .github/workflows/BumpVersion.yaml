@@ -80,6 +80,6 @@ jobs:
           git config --global user.name "GIT"
           git add platform/Chart.yaml
           git commit -m "Update Chart.yaml version to $NEWVERSION"
-          git push origin HEAD:$GITHUB_REF
+          git push origin HEAD:refs/heads/${{ github.event.pull_request.head.ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
