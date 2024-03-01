@@ -27,7 +27,6 @@ jobs:
         shell: bash
         run: |
           git show origin/develop:platform/Chart.yaml > /tmp/Chart.yaml
-      
       - name: Bump a Patch for Helm Chart Version
         if: >-
           contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
