@@ -12,12 +12,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Echo first commit message
+      - name: Echo head commit message
         run: |
-          echo  "${{ github.event.head_commit.message }}"
+          echo "${{ github.event.head_commit.message }}"
 
       - name: Echo first commit message
-        run: echo "First Commit Message: ${{ github.event.workflow_run.head_commit.message }}"
+        run: |
+          echo "First Commit Message: ${{ github.event.commits[0].message }}"
 
       - name: Echo push event details
         run: |
