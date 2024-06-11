@@ -1,4 +1,5 @@
 name: Frula12
+
 on: 
   workflow_dispatch:
   push:
@@ -12,10 +13,10 @@ jobs:
           fetch-depth: 0
 
       - name: Echo first commit message
-        run: echo "First Commit Message: ${{ github.event.commits.*.message }}"
+        run: echo "First Commit Message: ${{ github.event.commits[0].message }}"
 
       - name: Echo push event details
         run: |
           echo "Push Event Details:"
-          echo ${{ toJSON(github.event) }}
+          echo "${{ toJSON(github.event) }}"
     
