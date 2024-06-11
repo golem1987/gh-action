@@ -20,12 +20,13 @@ jobs:
         run: |
           echo "Push Event Details:"
 
-      - name: Echo push event details
+      - name: Echo first commit message
+        id: get_commit_message
         run: |
-          echo "Push Event Details:"
+          echo "COMMIT_MESSAGE=${{ github.event.commits[0].message }}" >> $GITHUB_ENV
 
       - name: Conditionally echo testingggg
+        if: github.event_name == 'push' && contains(steps.get_commit_message.outputs.COMMIT_MESSAGE, 'Bump')
         run: |
-          if [[ "$COMMIT_MESSAGE" == *"BUMP"* ]]; then
             echo "TESTINGGGGG"
-          fi
+
