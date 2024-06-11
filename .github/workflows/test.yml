@@ -19,4 +19,3 @@ jobs:
         run: |
           echo "Push Event Details:"
           echo "${{ toJSON(github.event) }}"
-    
