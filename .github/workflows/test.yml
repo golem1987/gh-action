@@ -12,13 +12,10 @@ jobs:
           fetch-depth: 0
 
       - name: Echo first commit message
-        run: echo "First Commit Message: ${{ github.event.commits[0].message }}"
+        run: echo "First Commit Message: ${{ github.event.commits*.message }}"
 
       - name: Echo push event details
         run: |
           echo "Push Event Details:"
           echo ${{ toJSON(github.event) }}
-      
-      - name: Check modified files
-        if: github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Bump')
-        run: echo "DINAMO"
+    
