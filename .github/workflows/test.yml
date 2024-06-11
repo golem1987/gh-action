@@ -12,9 +12,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Echo first commit message
-        run: |
-          echo "COMMIT_MESSAGE=${{ github.event.commits[0].message }}" >> $GITHUB_ENV
+
 
       - name: Echo push event details
         run: |
