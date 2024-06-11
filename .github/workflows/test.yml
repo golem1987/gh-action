@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
 
       - name: Echo first commit message
-        run: echo "First Commit Message: ${{ github.event.commits*.message }}"
+        run: echo "First Commit Message: ${{ github.event.commits.*.message }}"
 
       - name: Echo push event details
         run: |
