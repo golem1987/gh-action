@@ -12,15 +12,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Echo head commit message
-        run: |
-          echo "${{ github.event.head_commit.message }}"
-
       - name: Echo first commit message
         run: |
-          echo "First Commit Message: ${{ github.event.commits[0].message }}"
+          echo "COMMIT_MESSAGE=${{ github.event.commits[0].message }}" >> $GITHUB_ENV
 
       - name: Echo push event details
         run: |
           echo "Push Event Details:"
-          echo "${{ toJSON(github.event) }}"
+
+      - name: Echo push event details
+        run: |
+          echo "Push Event Details:"
+
+      - name: Conditionally echo testingggg
+        run: |
+          if [[ "$COMMIT_MESSAGE" == *"BUMP"* ]]; then
+            echo "TESTINGGGGG"
+          fi
