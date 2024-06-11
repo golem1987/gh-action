@@ -12,53 +12,6 @@ jobs:
           fetch-depth: 0
       
       - name: Check modified files
-        id: check-modified-files
-        uses: tj-actions/changed-files@v23.1
-        with:
-          files: |
-            /platform/*
-            /.github/*
-          files_ignore: |
-            /platform/fleet.yaml
-            /platform/Chart.yaml
-      - name: Getting Versions
-        run: |
-          echo "PR_VERSION=$(yq .version ./Chart.yaml)" >> $GITHUB_ENV
-          echo "REMOTE_VERSION=$(git show origin/develop:./Chart.yaml | yq e '.version')" >> $GITHUB_ENV
-
-      - name: Compare Chart versions
-        if: steps.check-modified-files.outputs.any_modified == 'true'
-        id: compare_chart_version
-        run: |
-          chmod +x ./.github/increase_version.sh
-          ./.github/increase_version.sh $REMOTE_VERSION $PR_VERSION
-
-      - name: Major Version
-        uses: actions-ecosystem/action-add-labels@v1
-        if: env.VER_RELEASE == 'major'
-        with:
-          labels: Major
-  
-      - name: Minor Version
-        uses: actions-ecosystem/action-add-labels@v1
-        if: env.VER_RELEASE == 'minor'
-        with:
-          labels: Minor
-
-      - name: Patch Version
-        uses: actions-ecosystem/action-add-labels@v1
-        if: env.VER_RELEASE == 'patch'
-        with:
-          labels: Patch
-  
-      - name: Update Chart.yaml with the new version
-        run: |
-          sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
-          git config --global user.email "git@gv.com"
-          git config --global user.name "GIT"
-          git add ./Chart.yaml
-          git commit -m "Update Chart.yaml version to $NEWVERSION"
-          git push origin HEAD:${{ github.head_ref }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        if: github.event_name == 'push' startsWith(github.event.head_commit.message, 'Bump version to')
+        run: echo "DINAMO"
  
