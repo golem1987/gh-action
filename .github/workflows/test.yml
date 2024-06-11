@@ -12,6 +12,5 @@ jobs:
           fetch-depth: 0
       
       - name: Check modified files
-        if: github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Bump version to')
+        if: github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Bump')
         run: echo "DINAMO"
- 
