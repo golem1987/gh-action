@@ -34,10 +34,8 @@ jobs:
 
     - name: Execute Python Script
       run: |
-        ls
+        ls -al
         echo "Executing Python script..."
-        cd learning-git
-        pwd
         python3 .github/tenant_update.py '${{ github.event.inputs.my_variable }}'
 
     - name: Update File

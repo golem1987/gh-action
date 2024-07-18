@@ -1,0 +1,79 @@
+name: Increase Version
+on: 
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install pybump
+        run: |
+          pip install pybump
+          pip install setuptools
+          
+      - name: Extract branch name and Chart.yaml from develop branch
+        shell: bash
+        run: |
+          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+          git show origin/develop:./Chart.yaml > /tmp/Chart.yaml
+      
+      - name: Bump a Patch for Helm Chart Version
+        if: >-
+          ${{ !(startsWith(env.BRANCH_NAME, 'majorVersion') || startsWith(env.BRANCH_NAME, 'minorVersion')) ||
+          contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
+          !contains(github.event.pull_request.labels.*.name, 'Major-Version') &&
+          !contains(github.event.pull_request.labels.*.name, 'Minor-Version') }}
+        run: |
+          pybump bump --file /tmp/Chart.yaml --level patch
+          echo "LEVEL=Patch" >> $GITHUB_ENV
+          echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)" >> $GITHUB_ENV
+           
+      - name: Bump a Minor for Helm Chart Version
+        if: >-
+          (startsWith(env.BRANCH_NAME, 'minorVersion') || 
+          contains(github.event.pull_request.labels.*.name, 'Minor-Version') &&
+          !contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
+          !contains(github.event.pull_request.labels.*.name, 'Major-Version'))
+        run: |
+          pybump bump --file /tmp/Chart.yaml --level minor
+          echo "LEVEL=Minor" >> $GITHUB_ENV
+          echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)"  >> $GITHUB_ENV
+
+      - name: Bump a Major for Helm Chart Version
+        if: >-
+          (startsWith(env.BRANCH_NAME, 'majorVersion') || 
+          contains(github.event.pull_request.labels.*.name, 'Major-Version') &&
+          !contains(github.event.pull_request.labels.*.name, 'Patch-Version') &&
+          !contains(github.event.pull_request.labels.*.name, 'Minor-Version'))
+        run: |
+          pybump bump --file /tmp/Chart.yaml --level major
+          echo "LEVEL=Major" >> $GITHUB_ENV
+          echo "NEWVERSION=$(yq .version /tmp/Chart.yaml)" >> $GITHUB_ENV
+
+      - name: Assign Label
+        uses: actions-ecosystem/action-add-labels@v1
+        if: github.event_name == 'pull_request'
+        with:
+          labels: ${{ env.LEVEL }}-Version
+
+      - name: Update Chart.yaml with the new version
+        if: github.event_name == 'pull_request'  
+        run: |
+          sed -i "s/^version:.*/version: $NEWVERSION/" ./Chart.yaml
+          git config --global user.email "git@gv.com"
+          git config --global user.name "GIT"
+          git add ./Chart.yaml
+          git commit -m "Update Chart.yaml version to $NEWVERSION"
+          git push origin HEAD:${{ github.head_ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          

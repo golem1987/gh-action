@@ -35,7 +35,7 @@ def main():
         print("Expecting one argument only")
         sys.exit(1)
     
-    file_path = "realms.yaml"
+    file_path = "learning-git/realms.yaml"
     realms = read_realms(file_path)
     realm_to_add = sys.argv[1]
     

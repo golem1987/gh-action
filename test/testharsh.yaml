@@ -1,0 +1,19 @@
+name: Build Helm charts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: check PR
+        run: |
+          echo "PR=${{ github.event.pull_request.number }}" >> GITHUB_ENV
+
+      - name: TEST
+        run: echo $PR
+          

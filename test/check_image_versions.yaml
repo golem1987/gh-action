@@ -1,0 +1,77 @@
+name: Check Image Versions
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: check_image_versions
+    runs-on: ubuntu-20.04
+    outputs:
+      del_service: ${{ steps.checking_images.outputs.del_service }}
+      dec_version: ${{ steps.checking_images.outputs.dec_version }}
+      dec_ver_msg: ${{ steps.checking_images.outputs.dec_ver_msg }}
+      del_ver_msg: ${{ steps.checking_images.outputs.del_ver_msg }}
+    steps:
+      - name: Checkout Base branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
+          path: base
+          
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          path: pr
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+      
+      - name: Copy files to /tmp
+        run: |
+          cp base/platform/values.yaml /tmp/basevalues.yaml
+          cp pr/platform/values.yaml  /tmp/prvalues.yaml
+
+      - name: Compare image tags inside of values.yaml
+        id: checking_images
+        run: |
+          python3 pr/.github/workflows/check_image_versions.py
+
+
+      - name: Print messages from script
+        run: |
+          echo "${{ steps.checking_images.outputs.dec_ver_msg }}"
+          echo "${{ steps.checking_images.outputs.del_ver_msg }}"
+          echo "DEL_SERVICE=${{ steps.checking_images.outputs.del_service }}" >> $GITHUB_ENV
+          echo "DEC_VERSION=${{ steps.checking_images.outputs.dec_version }}" >> $GITHUB_ENV
+
+      - name: Deleted Services Labels
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.DEL_SERVICE == '1'
+        with:
+          labels: DeletedService
+
+      - name: Decreased Service
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.DEC_VERSION == '1'
+        with:
+          labels: DecreasedServiceVersion
+
+      - name: Conditional stop and message
+        run: |
+          if [ "${{ env.DEL_SERVICE }}" == "1" ]; then
+            echo "${{ steps.checking_images.outputs.del_ver_msg }}"
+          fi
+          if [ "${{ env.DEC_VERSION }}" == "1" ]; then
+            echo "${{ steps.checking_images.outputs.dec_ver_msg }}"
+          fi
+          if [ "${{ env.DEL_SERVICE }}" == "1" ] || [ "${{ env.DEC_VERSION }}" == "1" ]; then
+            echo "Workflow fail as there is deleted services or decreased version for image tag"
+            exit 1
+          fi
+        shell: bash
