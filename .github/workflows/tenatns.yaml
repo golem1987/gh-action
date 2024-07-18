@@ -8,7 +8,7 @@ on:
         required: true
 
 jobs:
-  secondary-job:
+  update_cm_hybrid_fleet_state:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,8 +25,6 @@ jobs:
         pip install pyyaml
 
     - name: Checkout Another Repository
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         echo "Cloning another repository..."
         git clone https://x-access-token:${{ secrets.TOKEN_GH_GRANULAR }}@github.com/golem1987/learning-git.git
