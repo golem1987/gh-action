@@ -51,6 +51,4 @@ jobs:
         cd learning-git
         git config user.email "github-tokens@getvisibility.com"
         git config user.name "github-tokens"
-        git checkout master
-        git merge update-branch
         git push origin master
