@@ -37,15 +37,20 @@ jobs:
         ls -al
         echo "Executing Python script..."
         python3 .github/tenant_update.py '${{ github.event.inputs.tenant_id }}'
+        cat learning-git/realms.yaml
 
     - name: Update File
       run: |
         cd learning-git
+        git config user.email "github-tokens@getvisibility.com"
+        git config user.name "github-tokens"
         git commit -am 'Update specific file'
 
     - name: Merge to Master Branch
       run: |
         cd learning-git
+        git config user.email "github-tokens@getvisibility.com"
+        git config user.name "github-tokens"
         git checkout master
         git merge update-branch
         git push origin master
