@@ -36,7 +36,7 @@ jobs:
       run: |
         ls -al
         echo "Executing Python script..."
-        python3 .github/tenant_update.py '${{ github.event.inputs.my_variable }}'
+        python3 .github/tenant_update.py '${{ github.event.inputs.tenant_id }}'
 
     - name: Update File
       run: |
