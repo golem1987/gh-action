@@ -1,0 +1,52 @@
+name: Creating new realms
+
+on:
+  workflow_dispatch:
+    inputs:
+      tenant_id:
+        description: 'Tenant ID (gv000abc)'
+        required: true
+
+jobs:
+  secondary-job:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set Up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install Dependencies
+      run: |
+        pip install pyyaml
+
+    - name: Checkout Another Repository
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "Cloning another repository..."
+        git clone https://x-access-token:${{ secrets.TOKEN_GH_GRANULAR }}@github.com/golem1987/learning-git.git
+        cd learning-git
+
+    - name: Execute Python Script
+      run: |
+        echo "Executing Python script..."
+        cd learning-git
+        pwd
+        python3 .github/tenant_update.py '${{ github.event.inputs.my_variable }}'
+
+    - name: Update File
+      run: |
+        cd learning-git
+        git commit -am 'Update specific file'
+
+    - name: Merge to Master Branch
+      run: |
+        cd learning-git
+        git checkout master
+        git merge update-branch
+        git push origin master
